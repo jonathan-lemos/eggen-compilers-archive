@@ -1,0 +1,371 @@
+#!/bin/sh
+# This is a shell archive (produced by GNU sharutils 4.7).
+# To extract the files from this archive, save it to some FILE, remove
+# everything before the `#!/bin/sh' line above, then type `sh FILE'.
+#
+lock_dir=_sh12289
+# Made on 2019-08-31 18:27 EDT by <n01367640@osprey.unfcsd.unf.edu>.
+# Source directory was `/home/40/n01367640/p1'.
+#
+# Existing files will *not* be overwritten, unless `-c' is specified.
+#
+# This shar contains:
+# length mode       name
+# ------ ---------- ------------------------------------------
+#    793 -rw-r--r-- doc.txt
+#   1268 -rw-r--r-- Lexer.py
+#     54 -rw-r--r-- Makefile
+#     34 -rwxr-xr-x p1
+#    357 -rw-r--r-- testcase.cm
+#   1715 -rw-r--r-- typescript
+#
+MD5SUM=${MD5SUM-md5sum}
+f=`${MD5SUM} --version | egrep '^md5sum .*(core|text)utils'`
+test -n "${f}" && md5check=true || md5check=false
+${md5check} || \
+  echo 'Note: not verifying md5sums.  Consider installing GNU coreutils.'
+save_IFS="${IFS}"
+IFS="${IFS}:"
+gettext_dir=FAILED
+locale_dir=FAILED
+first_param="$1"
+for dir in $PATH
+do
+  if test "$gettext_dir" = FAILED && test -f $dir/gettext \
+     && ($dir/gettext --version >/dev/null 2>&1)
+  then
+    case `$dir/gettext --version 2>&1 | sed 1q` in
+      *GNU*) gettext_dir=$dir ;;
+    esac
+  fi
+  if test "$locale_dir" = FAILED && test -f $dir/shar \
+     && ($dir/shar --print-text-domain-dir >/dev/null 2>&1)
+  then
+    locale_dir=`$dir/shar --print-text-domain-dir`
+  fi
+done
+IFS="$save_IFS"
+if test "$locale_dir" = FAILED || test "$gettext_dir" = FAILED
+then
+  echo=echo
+else
+  TEXTDOMAINDIR=$locale_dir
+  export TEXTDOMAINDIR
+  TEXTDOMAIN=sharutils
+  export TEXTDOMAIN
+  echo="$gettext_dir/gettext -s"
+fi
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null
+then if (echo -n test; echo 1,2,3) | grep n >/dev/null
+     then shar_n= shar_c='
+'
+     else shar_n=-n shar_c= ; fi
+else shar_n= shar_c='\c' ; fi
+f=shar-touch.$$
+st1=200112312359.59
+st2=123123592001.59
+st2tr=123123592001.5 # old SysV 14-char limit
+st3=1231235901
+
+if touch -am -t ${st1} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st1} && test -f ${f}; then
+  shar_touch='touch -am -t $1$2$3$4$5$6.$7 "$8"'
+
+elif touch -am ${st2} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st2} && test ! -f ${st2tr} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$1$2.$7 "$8"'
+
+elif touch -am ${st3} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st3} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$2 "$8"'
+
+else
+  shar_touch=:
+  echo
+  ${echo} 'WARNING: not restoring timestamps.  Consider getting and'
+  ${echo} 'installing GNU `touch'\'', distributed in GNU coreutils...'
+  echo
+fi
+rm -f ${st1} ${st2} ${st2tr} ${st3} ${f}
+#
+if test ! -d ${lock_dir}
+then : ; else ${echo} 'lock directory '${lock_dir}' exists'
+  exit 1
+fi
+if mkdir ${lock_dir}
+then ${echo} 'x - created lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to create lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+# ============= doc.txt ==============
+if test -f 'doc.txt' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING doc.txt (file already exists)'
+else
+${echo} 'x - extracting doc.txt (binary)'
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 doc.txt
+M2F]N871H86X@3&5M;W,*0V]M<&EL97(@4')O:F5C="`Q"DQE>&EC86P@06YA
+M;'EZ97(*1'(N($5G9V5N"@I3=6)M:71T960Z(#@O,S`O,3D*1'5E.B`Y+S4O
+M,3D*"E1H92!P=7)P;W-E(&]F('1H:7,@<')O:F5C="!I<R!T;R!S97!A<F%T
+M92!A;B!I;G!U="!S=')I;F<@:6YT;R!A('-E<75E;F-E(&]F('1O:V5N<R!T
+M:&%T(&-O<G)E<W!O;F0@=&\@=&AE('1E<FUI;F%L<R!O9B!T:&4@0RT@0T9'
+M+B!->2!P<F]G<F%M(&%C8V]M<&QI<VAE<R!T:&ES(&)Y(')E<&5A=&5D;'D@
+M;6%T8VAI;F<@=&AE(&)E9VEN;FEN9R!O9B!E86-H(&QI;F4@=VET:"!A('-E
+M<FEE<R!O9B!R96=U;&%R(&5X<')E<W-I;VYS(&%N9"!S=6)S97%U96YT;'D@
+M<F5M;W9I;F<@=&AE("IL;VYG97-T*B!M871C:"!U;G1I;"!T:&4@<W1R:6YG
+M(&ES(&)L86YK+B!7:&ET97-P86-E(&ES('-K:7!P960@;W9E<B!U<VEN9R`N
+M<W1R:7`H*2!A;F0@8V]M;65N=',@87)E(&AA;F1L960@=7-I;F<@82!B;V]L
+M96%N('9A<FEA8FQE+@H*5&AE(&UA:V5F:6QE(&1O97-N)W0@86-T=6%L;'D@
+M9&\@86YY=&AI;F<@8F5C875S92!T:&ES('!R;VIE8W0@:7,@=W)I='1E;B!I
+M;B!0>71H;VX@=VAI8V@@9&]E<R!N;W0@;F5E9"!T;R!B92!C;VUP:6QE9"X@
+M5&AE('!R;VIE8W0@:7,@<G5N('5S:6YG("<N+W`Q("1F:6QE;F%M92<N(%1H
+M92!I;G!U="!I<R!G:79E;B!T:')O=6=H(&$@9FEL92!S<&5C:69I960@:6X@
+M=&AE(&9I<G-T(&-O;6UA;F0M;&EN92!A<F=U;65N="P@86YD('1H92!O=71P
+<=70@:7,@9VEV96X@=&AR;W5G:"!S=&1O=70N"F5N
+`
+end
+SHAR_EOF
+  (set 20 19 08 31 11 30 58 'doc.txt'; eval "$shar_touch") &&
+  chmod 0644 'doc.txt'
+if test $? -ne 0
+then ${echo} 'restore of doc.txt failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'doc.txt: MD5 check failed'
+       ) << \SHAR_EOF
+4eb059f843a9b6feef428bbf293bc2a9  doc.txt
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'doc.txt'` -ne 793 && \
+  ${echo} 'restoration warning:  size of doc.txt is not 793'
+  fi
+fi
+# ============= Lexer.py ==============
+if test -f 'Lexer.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Lexer.py (file already exists)'
+else
+${echo} 'x - extracting Lexer.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Lexer.py' &&
+import sys
+import re
+X
+regexes = [
+X    ("ID", r"[a-zA-Z]+"),
+X    ("NUM", r"[0-9]+"),
+X    ("TYPE", r"int|void"),
+X    ("KEYWORD", r"if|else|while|return"),
+X    ("DELIM", r"[,()\[\]{};]"),
+X    ("ADDOP", r"[+\-]"),
+X    ("MULOP", r"[*/]"),
+X    ("=", "="),
+X    ("RELOP", r">=|<=|==|!=|>|<"),
+]
+X
+comment = False
+for line in open(sys.argv[1], "r"):
+X    if line.strip() == "":
+X        continue
+X    print("Input: '" + line.strip() + "'")
+X    line = line.strip()
+X    while line != "":
+X        if not comment:
+X            if line.startswith("//"):
+X                break
+X            if line.startswith("/*"):
+X                line = line[2:]
+X                comment = True
+X                continue
+X            longest = ("ERROR", line[0])
+X            for token, pattern in regexes:
+X                mat = re.match(pattern, line)
+X                if mat:
+X                    longest = longest if len(longest[1]) > mat.end() else (token, line[:mat.end()])
+X            print(longest[0] + ": " + longest[1])
+X            line = line[len(longest[1]):]
+X            line = line.strip()
+X        else:
+X            mat = re.match(r".*?\*/", line)
+X            if not mat:
+X                line = ""
+X            else:
+X                line = line[mat.end():].strip()
+X                comment = False
+X
+SHAR_EOF
+  (set 20 19 08 31 11 36 07 'Lexer.py'; eval "$shar_touch") &&
+  chmod 0644 'Lexer.py'
+if test $? -ne 0
+then ${echo} 'restore of Lexer.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Lexer.py: MD5 check failed'
+       ) << \SHAR_EOF
+58afa4093e8db4b59733e62ecc5da1ee  Lexer.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Lexer.py'` -ne 1268 && \
+  ${echo} 'restoration warning:  size of Lexer.py is not 1268'
+  fi
+fi
+# ============= Makefile ==============
+if test -f 'Makefile' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Makefile (file already exists)'
+else
+${echo} 'x - extracting Makefile (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Makefile' &&
+all:
+X	@echo 'Compiling not needed, project in python'
+SHAR_EOF
+  (set 20 19 08 31 11 32 38 'Makefile'; eval "$shar_touch") &&
+  chmod 0644 'Makefile'
+if test $? -ne 0
+then ${echo} 'restore of Makefile failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Makefile: MD5 check failed'
+       ) << \SHAR_EOF
+ceee9f131b3a1ab37217cf4ffc7dfedd  Makefile
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Makefile'` -ne 54 && \
+  ${echo} 'restoration warning:  size of Makefile is not 54'
+  fi
+fi
+# ============= p1 ==============
+if test -f 'p1' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING p1 (file already exists)'
+else
+${echo} 'x - extracting p1 (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'p1' &&
+#!/bin/bash
+python3.6 Lexer.py $1
+SHAR_EOF
+  (set 20 19 08 31 11 33 00 'p1'; eval "$shar_touch") &&
+  chmod 0755 'p1'
+if test $? -ne 0
+then ${echo} 'restore of p1 failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'p1: MD5 check failed'
+       ) << \SHAR_EOF
+9502b0dd7d4cf1f4746afa0f4216fd45  p1
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'p1'` -ne 34 && \
+  ${echo} 'restoration warning:  size of p1 is not 34'
+  fi
+fi
+# ============= testcase.cm ==============
+if test -f 'testcase.cm' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING testcase.cm (file already exists)'
+else
+${echo} 'x - extracting testcase.cm (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'testcase.cm' &&
+/****This**********/
+/**************/
+/*************************
+i = 333;        ******************/       */
+X
+iiii = 3@33;
+X
+int g 4 cd (int u, int v)      {
+X	if(v == >= 0) return/*a comment*/ u;
+X	else ret_urn gcd(vxxxxxxvvvvv, u-u/v*v);
+X	       /* u-u/v*v == u mod v*/
+X		   !   
+}
+X
+return void while       void main()
+===== >== =>> =>= intvoid whilea inta
+SHAR_EOF
+  (set 20 19 08 31 11 36 19 'testcase.cm'; eval "$shar_touch") &&
+  chmod 0644 'testcase.cm'
+if test $? -ne 0
+then ${echo} 'restore of testcase.cm failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'testcase.cm: MD5 check failed'
+       ) << \SHAR_EOF
+c260f56d9f8b8de05fb411d8b4c4a664  testcase.cm
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'testcase.cm'` -ne 357 && \
+  ${echo} 'restoration warning:  size of testcase.cm is not 357'
+  fi
+fi
+# ============= typescript ==============
+if test -f 'typescript' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING typescript (file already exists)'
+else
+${echo} 'x - extracting typescript (binary)'
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 typescript
+M4V-R:7!T('-T87)T960@;VX@4V%T(#,Q($%U9R`R,#$Y(#`V.C(W.C0T(%!-
+M($5$5`H;6S\Q,#,T:%MN,#$S-C<V-#!`;W-P<F5Y('1E<W1=)"!U;G-H87(@
+M9FX-"B]H;VUE+S0P+VXP,3,V-S8T,"]P,2]T97-T+V9N.@T*>"`M(&-R96%T
+M960@;&]C:R!D:7)E8W1O<GD@8%]S:#$R,30Q)RX-"G@@+2!E>'1R86-T:6YG
+M(&1O8RYT>'0@*&)I;F%R>2D-"G@@+2!E>'1R86-T:6YG($QE>&5R+G!Y("AT
+M97AT*0T*>"`M(&5X=')A8W1I;F<@36%K969I;&4@*'1E>'0I#0IX("T@97AT
+M<F%C=&EN9R!P,2`H=&5X="D-"G@@+2!E>'1R86-T:6YG('1E<W1C87-E+F-M
+M("AT97AT*0T*>"`M(')E;6]V960@;&]C:R!D:7)E8W1O<GD@8%]S:#$R,30Q
+M)RX-"EMN,#$S-C<V-#!`;W-P<F5Y('1E<W1=)"!M86ME#0I#;VUP:6QI;F<@
+M;F]T(&YE961E9"P@<')O:F5C="!I;B!P>71H;VX-"EMN,#$S-C<V-#!`;W-P
+M<F5Y('1E<W1=)"`N+W`Q('1E<W1C87-E+F-M#0I);G!U=#H@)R\J*BHJ5&AI
+M<RHJ*BHJ*BHJ*BHO)PT*26YP=70Z("<O*BHJ*BHJ*BHJ*BHJ*BHO)PT*26YP
+M=70Z("<O*BHJ*BHJ*BHJ*BHJ*BHJ*BHJ*BHJ*BHJ*B<-"DEN<'5T.B`G:2`]
+M(#,S,SL@("`@("`@("HJ*BHJ*BHJ*BHJ*BHJ*BHJ*B\@("`@("`@*B\G#0I-
+M54Q/4#H@*@T*355,3U`Z("\-"DEN<'5T.B`G:6EI:2`](#-`,S,[)PT*240Z
+M(&EI:6D-"CTZ(#T-"DY533H@,PT*15)23U(Z($`-"DY533H@,S,-"D1%3$E-
+M.B`[#0I);G!U=#H@)VEN="!G(#0@8V0@*&EN="!U+"!I;G0@=BD@("`@("![
+M)PT*5%E013H@:6YT#0I)1#H@9PT*3E5-.B`T#0I)1#H@8V0-"D1%3$E-.B`H
+M#0I465!%.B!I;G0-"DE$.B!U#0I$14Q)33H@+`T*5%E013H@:6YT#0I)1#H@
+M=@T*1$5,24TZ("D-"D1%3$E-.B![#0I);G!U=#H@)VEF*'8@/3T@/CT@,"D@
+M<F5T=7)N+RIA(&-O;6UE;G0J+R!U.R<-"DM%65=/4D0Z(&EF#0I$14Q)33H@
+M*`T*240Z('8-"E)%3$]0.B`]/0T*4D5,3U`Z(#X]#0I.54TZ(#`-"D1%3$E-
+M.B`I#0I+15E73U)$.B!R971U<FX-"DE$.B!U#0I$14Q)33H@.PT*26YP=70Z
+M("=E;'-E(')E=%]U<FX@9V-D*'9X>'AX>'AV=G9V=BP@=2UU+W8J=BD[)PT*
+M2T595T]21#H@96QS90T*240Z(')E=`T*15)23U(Z(%\-"DE$.B!U<FX-"DE$
+M.B!G8V0-"D1%3$E-.B`H#0I)1#H@=GAX>'AX>'9V=G9V#0I$14Q)33H@+`T*
+M240Z('4-"D%$1$]0.B`M#0I)1#H@=0T*355,3U`Z("\-"DE$.B!V#0I-54Q/
+M4#H@*@T*240Z('8-"D1%3$E-.B`I#0I$14Q)33H@.PT*26YP=70Z("<O*B!U
+M+74O=BIV(#T]('4@;6]D('8J+R<-"DEN<'5T.B`G(2<-"D524D]2.B`A#0I)
+M;G!U=#H@)WTG#0I$14Q)33H@?0T*26YP=70Z("=R971U<FX@=F]I9"!W:&EL
+M92`@("`@("!V;VED(&UA:6XH*2<-"DM%65=/4D0Z(')E='5R;@T*5%E013H@
+M=F]I9`T*2T595T]21#H@=VAI;&4-"E194$4Z('9O:60-"DE$.B!M86EN#0I$
+M14Q)33H@*`T*1$5,24TZ("D-"DEN<'5T.B`G/3T]/3T@/CT](#T^/B`]/CT@
+M:6YT=F]I9"!W:&EL96$@:6YT82<-"E)%3$]0.B`]/0T*4D5,3U`Z(#T]#0H]
+M.B`]#0I214Q/4#H@/CT-"CTZ(#T-"CTZ(#T-"E)%3$]0.B`^#0I214Q/4#H@
+M/@T*/3H@/0T*4D5,3U`Z(#X]#0I)1#H@:6YT=F]I9`T*240Z('=H:6QE80T*
+M240Z(&EN=&$-"EMN,#$S-C<V-#!`;W-P<F5Y('1E<W1=)"!E>&ET#0IE>&ET
+M#0H*4V-R:7!T(&1O;F4@;VX@4V%T(#,Q($%U9R`R,#$Y(#`V.C(W.C0T(%!-
+%($5$5`IR
+`
+end
+SHAR_EOF
+  (set 20 19 08 31 18 27 44 'typescript'; eval "$shar_touch") &&
+  chmod 0644 'typescript'
+if test $? -ne 0
+then ${echo} 'restore of typescript failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'typescript: MD5 check failed'
+       ) << \SHAR_EOF
+dcb9a9e14e4b19c227219846d8dd926d  typescript
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'typescript'` -ne 1715 && \
+  ${echo} 'restoration warning:  size of typescript is not 1715'
+  fi
+fi
+if rm -fr ${lock_dir}
+then ${echo} 'x - removed lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to remove lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+exit 0

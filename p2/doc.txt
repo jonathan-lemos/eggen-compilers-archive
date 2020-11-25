@@ -1,0 +1,10 @@
+[your name]
+[class] Project 2
+[name of project]
+Dr. Eggen
+
+Submitted: 01/21/20
+Due: [due date]
+
+[explain the overall design, explain how to run the program, files created, files consumed, special concerns. this should be at least a good paragraph.]
+

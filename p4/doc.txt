@@ -1,0 +1,13 @@
+Jonathan Lemos
+Compiler Project 4
+Semantic Analyzer
+Dr. Eggen
+
+Submitted: 11/04/19
+Due: 11/07/19
+
+This program is an extension of the previous parser project that also checks the semantic rules of C minus,
+such as making sure that all variables used have been previously declared. It works by recursively descending
+the parse tree made in the previous project. You run it using './p4 $filename', and it prints 'ACCEPT' or 
+'REJECT' depending on if the contents of $filename correspond to a valid C minus program or not. 'make' is
+not needed because the project is written in Python.

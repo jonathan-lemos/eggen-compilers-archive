@@ -1,0 +1,1520 @@
+#!/bin/sh
+# This is a shell archive (produced by GNU sharutils 4.7).
+# To extract the files from this archive, save it to some FILE, remove
+# everything before the `#!/bin/sh' line above, then type `sh FILE'.
+#
+lock_dir=_sh22750
+# Made on 2019-11-26 10:28 EST by <n01367640@osprey.unfcsd.unf.edu>.
+# Source directory was `/home/40/n01367640/p5'.
+#
+# Existing files will *not* be overwritten, unless `-c' is specified.
+#
+# This shar contains:
+# length mode       name
+# ------ ---------- ------------------------------------------
+#   7286 -rw-r--r-- CodeGen.py
+#    698 -rw-r--r-- doc.txt
+#   8107 -rw-r--r-- grammar.py
+#   1399 -rw-r--r-- Lexer.py
+#     56 -rw-r--r-- Makefile
+#    776 -rw-r--r-- orderedset.py
+#     35 -rwxr-xr-x p5
+#   2269 -rwxr-xr-x Parser.py
+#   6710 -rw-r--r-- SemAnalyzer.py
+#    663 -rw-r--r-- testcase.cm
+#    172 -rw-r--r-- TestLexer.py
+#   8713 -rw-r--r-- typescript
+#
+MD5SUM=${MD5SUM-md5sum}
+f=`${MD5SUM} --version | egrep '^md5sum .*(core|text)utils'`
+test -n "${f}" && md5check=true || md5check=false
+${md5check} || \
+  echo 'Note: not verifying md5sums.  Consider installing GNU coreutils.'
+save_IFS="${IFS}"
+IFS="${IFS}:"
+gettext_dir=FAILED
+locale_dir=FAILED
+first_param="$1"
+for dir in $PATH
+do
+  if test "$gettext_dir" = FAILED && test -f $dir/gettext \
+     && ($dir/gettext --version >/dev/null 2>&1)
+  then
+    case `$dir/gettext --version 2>&1 | sed 1q` in
+      *GNU*) gettext_dir=$dir ;;
+    esac
+  fi
+  if test "$locale_dir" = FAILED && test -f $dir/shar \
+     && ($dir/shar --print-text-domain-dir >/dev/null 2>&1)
+  then
+    locale_dir=`$dir/shar --print-text-domain-dir`
+  fi
+done
+IFS="$save_IFS"
+if test "$locale_dir" = FAILED || test "$gettext_dir" = FAILED
+then
+  echo=echo
+else
+  TEXTDOMAINDIR=$locale_dir
+  export TEXTDOMAINDIR
+  TEXTDOMAIN=sharutils
+  export TEXTDOMAIN
+  echo="$gettext_dir/gettext -s"
+fi
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null
+then if (echo -n test; echo 1,2,3) | grep n >/dev/null
+     then shar_n= shar_c='
+'
+     else shar_n=-n shar_c= ; fi
+else shar_n= shar_c='\c' ; fi
+f=shar-touch.$$
+st1=200112312359.59
+st2=123123592001.59
+st2tr=123123592001.5 # old SysV 14-char limit
+st3=1231235901
+
+if touch -am -t ${st1} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st1} && test -f ${f}; then
+  shar_touch='touch -am -t $1$2$3$4$5$6.$7 "$8"'
+
+elif touch -am ${st2} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st2} && test ! -f ${st2tr} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$1$2.$7 "$8"'
+
+elif touch -am ${st3} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st3} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$2 "$8"'
+
+else
+  shar_touch=:
+  echo
+  ${echo} 'WARNING: not restoring timestamps.  Consider getting and'
+  ${echo} 'installing GNU `touch'\'', distributed in GNU coreutils...'
+  echo
+fi
+rm -f ${st1} ${st2} ${st2tr} ${st3} ${f}
+#
+if test ! -d ${lock_dir}
+then : ; else ${echo} 'lock directory '${lock_dir}' exists'
+  exit 1
+fi
+if mkdir ${lock_dir}
+then ${echo} 'x - created lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to create lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+# ============= CodeGen.py ==============
+if test -f 'CodeGen.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING CodeGen.py (file already exists)'
+else
+${echo} 'x - extracting CodeGen.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'CodeGen.py' &&
+from SemAnalyzer import functab
+X
+_ctr = -1
+X
+X
+def ctr():
+X    global _ctr
+X    _ctr += 1
+X    return _ctr
+X
+X
+_tmp = -1
+X
+X
+def tmp():
+X    global _tmp
+X    _tmp += 1
+X    return "_t" + str(_tmp)
+X
+X
+def params_len(p):
+X    if p.item.prod == ("void",):
+X        return 0
+X
+X    def plist_len(pl):
+X        if len(pl.children) == 3:
+X            return 1 + plist_len(pl.children[0])
+X        else:
+X            return 1
+X
+X    return plist_len(p.children[0])
+X
+X
+def gen_fundec(fd):
+X    return [(ctr(), "func", fd.children[1].token, fd.children[0].children[0].token, params_len(fd.children[3]))] + \
+X           gen_params(fd.children[3]) + \
+X           [y for x in fd.children[5] for y in default_gen(x)] + \
+X           [(ctr(), "end", "func", fd.children[1].token, "")]
+X
+X
+def gen_params(p):
+X    if p.item.prod == ("void",):
+X        return []
+X
+X    def plist_rec(pl):
+X        if len(pl.children) == 3:
+X            q = pl.children[2]
+X            return plist_rec(pl.children[0]) + [(ctr(), "param", "", "", q.children[1].token)]
+X        else:
+X            q = pl.children[0]
+X            return [(ctr(), "param", "", "", q.children[1].token)]
+X
+X    return plist_rec(p.children[0])
+X
+X
+def gen_comp_stmt(c):
+X    #return [(ctr(), "block", "", "", "")] + \
+X    #       [y for x in c for y in default_gen(x)] + \
+X    #       [(ctr(), "end", "block", "", "")]
+X    return [y for x in c for y in default_gen(x)]
+X
+X
+def gen_vardec(vd):
+X    if len(vd.children) == 3:
+X        return [(ctr(), "alloc", "4", "", vd.children[1].token)]
+X    else:
+X        size = int(vd.children[3].token) * 4
+X        return [(ctr(), "alloc", str(size), "", vd.children[1].token)]
+X
+X
+def gen_selectionstmt(ss):
+X    cond = gen_condition(ss.children[2])
+X    e2 = default_gen(ss.children[4])
+X    if len(ss.children) == 7:
+X        e2 += [(ctr(), "br", "", "", "")]
+X        cond[-1] = tuple(list(cond[-1])[:-1] + [str(_ctr + 1)])
+X        e3 = default_gen(ss.children[6])
+X        txx = list(e2[-1])
+X        txx[-1] = str(_ctr + 1)
+X        e2[-1] = tuple(txx)
+X        return cond + e2 + e3
+X    else:
+X        cond[-1] = tuple(list(cond[-1])[:-1] + [str(_ctr + 1)])
+X        return cond + e2
+X
+X
+def gen_iterationstmt(ss):
+X    ctrinit = _ctr + 1
+X    cond = gen_condition(ss.children[2])
+X    e2 = default_gen(ss.children[4])
+X    x = [(ctr(), "br", "", "", str(ctrinit))]
+X    cond[-1] = tuple(list(cond[-1])[:-1] + [str(_ctr + 1)])
+X    return cond + e2 + x
+X
+X
+def gen_returnstmt(rs):
+X    if len(rs.children) == 3:
+X        e, n = gen_expr(rs.children[1])
+X        return e + [(ctr(), "return", "", "", n)]
+X    else:
+X        return [(ctr(), "return", "", "", "")]
+X
+X
+def gen_condition(ex):
+X    if len(ex.children) == 3:
+X        v, nv = gen_var(ex.children[0])
+X        e, ne = gen_expr(ex.children[2])
+X        res = [(ctr(), "assgn", ne, "", nv)]
+X        cmp = [(ctr(), "compr", res[-1][-1], "0", tmp())]
+X        br = [(ctr(), "breq", cmp[-1][-1], "", "XXX")]
+X        return v + e + res + cmp + br
+X    else:
+X        return gen_condition_simple_expr(ex.children[0])
+X
+X
+def gen_condition_simple_expr(se):
+X    if len(se.children) == 3:
+X        e1, n1 = gen_additive_expr(se.children[0])
+X        e2, n2 = gen_additive_expr(se.children[2])
+X        br = {
+X            "==": "brne",
+X            "!=": "breq",
+X            ">=": "brlt",
+X            "<=": "brgt",
+X            ">": "brle",
+X            "<": "brge"
+X        }[se.children[1].token]
+X        cmp = [(ctr(), "compr", n1, n2, tmp())]
+X        brr = [(ctr(), br, cmp[-1][-1], "", "XXX")]
+X        return e1 + e2 + cmp + brr
+X    else:
+X        a, n = gen_additive_expr(se.children[0])
+X        cmp = [(ctr(), "compr", n, "0", tmp())]
+X        br = [(ctr(), "breq", cmp[-1][-1], "", "XXX")]
+X        return a + cmp + br
+X
+X
+def gen_expr(ex):
+X    if len(ex.children) == 3:
+X        v, vn = gen_var(ex.children[0])
+X        e, en = gen_expr(ex.children[2])
+X        return v + e + [(ctr(), "assgn", en, "", vn)], vn
+X    else:
+X        return gen_simple_expr(ex.children[0])
+X
+X
+def gen_var(v):
+X    if len(v.children) == 1:
+X        return [], v.children[0].token
+X    else:
+X        e, n = gen_expr(v.children[2])
+X        x = [(ctr(), "mul", n, "4", tmp())]
+X        t = [(ctr(), "disp", v.children[0].token, x[-1][-1], tmp())]
+X        return e + x + t, t[-1][-1]
+X        # return e + t, t[-1][-1]
+X
+X
+def gen_simple_expr(se):
+X    if len(se.children) == 3:
+X        e1, n1 = gen_additive_expr(se.children[0])
+X        e2, n2 = gen_additive_expr(se.children[2])
+X        br = {
+X            "==": "brne",
+X            "!=": "breq",
+X            ">=": "brlt",
+X            "<=": "brgt",
+X            ">": "brle",
+X            "<": "brge"
+X        }[se.children[1].token]
+X        agn1 = [(ctr(), "assgn", "0", "", tmp())]
+X        comp = [(ctr(), "compr", n1, n2, tmp())]
+X        brr = [(ctr(), br, comp[-1][-1], "", _ctr + 2)]
+X        agn2 = [(ctr(), "assgn", "1", "", agn1[-1][-1])]
+X        return e1 + e2 + agn1 + comp + brr + agn2, agn1[-1][-1]
+X    else:
+X        return gen_additive_expr(se.children[0])
+X
+X
+def gen_additive_expr(ae):
+X    if len(ae.children) == 3:
+X        e1, n1 = gen_additive_expr(ae.children[0])
+X        op = {
+X            "+": "add",
+X            "-": "sub",
+X        }[ae.children[1].token]
+X        e2, n2 = gen_term(ae.children[2])
+X        x = [(ctr(), op, n1, n2, tmp())]
+X        return e1 + e2 + x, x[-1][-1]
+X    else:
+X        return gen_term(ae.children[0])
+X
+X
+def gen_term(t):
+X    if len(t.children) == 3:
+X        e1, n1 = gen_term(t.children[0])
+X        op = {
+X            "*": "mul",
+X            "/": "div",
+X        }[t.children[1].token]
+X        e2, n2 = gen_factor(t.children[2])
+X        x = [(ctr(), op, n1, n2, tmp())]
+X        return e1 + e2 + x, x[-1][-1]
+X    else:
+X        return gen_factor(t.children[0])
+X
+X
+def gen_factor(f):
+X    if len(f.children) == 3:
+X        return gen_expr(f.children[1])
+X    elif f.children[0].item.prod == ("NUM",):
+X        return [], f.children[0].token
+X    elif f.children[0].item.nt == "var":
+X        return gen_var(f.children[0])
+X    else:
+X        return gen_call(f.children[0])
+X
+X
+def gen_args(a):
+X    if a.item.prod == ("#",):
+X        return [], 0
+X
+X    counter = 0
+X
+X    def gen_args_rec(alist):
+X        nonlocal counter
+X        counter += 1
+X
+X        if len(alist.children) == 3:
+X            x, y = gen_args_rec(alist.children[0])
+X            b, c = gen_expr(alist.children[2])
+X            return x + b, y + [c]
+X        else:
+X            b, c = gen_expr(alist.children[0])
+X            return b, [c]
+X
+X    res = gen_args_rec(a.children[0])
+X    q = res[0] + [(ctr(), "arg", "", "", x) for x in res[1]], counter
+X    return q
+X
+X
+def gen_call(c):
+X    a, ct = gen_args(c.children[2])
+X    b = [(ctr(), "call", c.children[0].token, str(ct), tmp() if functab[c.children[0].token][0] != "void" else "")]
+X    return a + b, b[-1][-1]
+X
+X
+def gen_expr_discard(r):
+X    return gen_expr(r)[0]
+X
+X
+generators = {
+X    "var-declaration": gen_vardec,
+X    "fun-declaration": gen_fundec,
+X    "params": gen_params,
+X    "selection-stmt": gen_selectionstmt,
+X    "expression": gen_expr_discard,
+X    "compound-stmt": gen_comp_stmt,
+X    "iteration-stmt": gen_iterationstmt,
+X    "return-stmt": gen_returnstmt
+}
+X
+X
+def default_gen(root):
+X    if not root.item.is_reduce():
+X        return []
+X    if root.item.nt in generators:
+X        return generators[root.item.nt](root)
+X    else:
+X        return [y for x in root for y in default_gen(x)]
+SHAR_EOF
+  (set 20 19 11 26 10 21 05 'CodeGen.py'; eval "$shar_touch") &&
+  chmod 0644 'CodeGen.py'
+if test $? -ne 0
+then ${echo} 'restore of CodeGen.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'CodeGen.py: MD5 check failed'
+       ) << \SHAR_EOF
+220de28201878d526e4ce5dc5db556ef  CodeGen.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'CodeGen.py'` -ne 7286 && \
+  ${echo} 'restoration warning:  size of CodeGen.py is not 7286'
+  fi
+fi
+# ============= doc.txt ==============
+if test -f 'doc.txt' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING doc.txt (file already exists)'
+else
+${echo} 'x - extracting doc.txt (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'doc.txt' &&
+Jonathan Lemos
+Compilers Project 5
+Code Generator
+Dr. Eggen
+X
+Submitted: 11/26/19
+Due: 11/28/19
+X
+This code generator generates druples corresponding to the input C- program. An input program must be semantically
+correct, because this code generator needs the function table from the semantic analyzer. It works by using a lexer
+to generate tokens, a parser to turn those tokens into a tree, and a code generator that walks the tree to
+generate code. To be honest, I don't quite remember how the lexer or parser work, and I'm not really sure
+how the code generator works either. You run it with `./p5 $filename`, and it'll print 'REJECT' if your input
+file is bad, or a list of druples if it's good.
+SHAR_EOF
+  (set 20 19 11 26 10 28 41 'doc.txt'; eval "$shar_touch") &&
+  chmod 0644 'doc.txt'
+if test $? -ne 0
+then ${echo} 'restore of doc.txt failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'doc.txt: MD5 check failed'
+       ) << \SHAR_EOF
+59cbb598dc581010c91afdf4c3ab9e16  doc.txt
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'doc.txt'` -ne 698 && \
+  ${echo} 'restoration warning:  size of doc.txt is not 698'
+  fi
+fi
+# ============= grammar.py ==============
+if test -f 'grammar.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING grammar.py (file already exists)'
+else
+${echo} 'x - extracting grammar.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'grammar.py' &&
+import re
+from orderedset import orderedset
+from functools import reduce
+X
+X
+class item:
+X    def __init__(self, nt, prod, dotpos=0):
+X        self.nt, self.prod, self.dotpos = nt, prod, dotpos
+X        self.hash = hash((self.nt, self.prod, self.dotpos))
+X
+X    def __eq__(self, other):
+X        return self.nt == other.nt and self.prod == other.prod and self.dotpos == other.dotpos
+X
+X    def __hash__(self):
+X        return self.hash
+X
+X    def advanced(self):
+X        assert self.dotpos < len(self.prod)
+X        return item(self.nt, self.prod, self.dotpos + 1)
+X
+X    def retarded(self):
+X        assert self.dotpos > 0
+X        return item(self.nt, self.prod, self.dotpos - 1)
+X
+X    def current(self):
+X        return self.prod[self.dotpos]
+X
+X    def previous(self):
+X        assert self.dotpos > 0
+X        return self.prod[self.dotpos - 1]
+X
+X    def is_reduce(self):
+X        return self.dotpos >= len(self.prod)
+X
+X    def __str__(self):
+X        return self.nt + " -> " + " ".join(list(self.prod[:self.dotpos]) + ["."] + list(self.prod)[self.dotpos:])
+X
+X
+class earleyitem:
+X    def __init__(self, item, origin, index):
+X        self.item, self.origin, self.index = item, origin, index
+X        self.hash = hash((self.item, self.origin))
+X
+X    def __eq__(self, other):
+X        return self.item == other.item and self.origin == other.origin
+X
+X    def __hash__(self):
+X        return self.hash
+X
+X    def __str__(self):
+X        return "(" + str(self.item) + ", " + str(self.origin) + ", " + str(self.index) + ")"
+X
+X
+class earleyset:
+X    def __init__(self):
+X        self.items, self.prev = orderedset(), {}
+X
+X    def add(self, item, origin, index, prev):
+X        newitem = earleyitem(item, origin, index)
+X        if newitem in self.items:
+X            self.prev[newitem].add(prev)
+X        else:
+X            self.prev[newitem] = orderedset([prev])
+X            self.items.add(newitem)
+X
+X    def __contains__(self, item):
+X        return item in self.items
+X
+X    def __iter__(self):
+X        return iter(self.items)
+X
+X    def __str__(self):
+X        return str(self.items)
+X
+X
+class treenode:
+X    def __init__(self, item, token, children=None):
+X        if not children:
+X            children = []
+X        self.item, self.token, self.children = item, token, children
+X
+X    def __iter__(self):
+X        return iter(self.children)
+X
+X    def __len__(self):
+X        return len(self.children)
+X
+X    def repr_rec(self, level=0):
+X        return ("\t" * level) + str(self) +\
+X            reduce(lambda a, c: a + "\n" + c.repr_rec(level + 1), self.children, "")
+X
+X    def __repr__(self):
+X        return self.repr_rec()
+X
+X    def __str__(self):
+X        return str(self.item)
+X
+X
+class grammar:
+X    def __init__(self, rules):
+X        self.start = ""
+X        self.rules = {}
+X        self.nonterms = set()
+X        all = set()
+X        for rule in rules:
+X            nt, rhs = (x.strip() for x in rule.split("->"))
+X            if self.start == "":
+X                self.start = nt
+X            self.nonterms.add(nt)
+X            for prod in (x.strip() for x in rhs.split("|")):
+X                if nt not in self.rules:
+X                    self.rules[nt] = set()
+X                self.rules[nt].add(tuple(x.strip() for x in prod.split()))
+X                all |= {x.strip() for x in prod.split()}
+X        self.terms = all - self.nonterms - {"#"}
+X
+X    def __iter__(self):
+X        return iter(self.rules.items())
+X
+X    def __getitem__(self, nt):
+X        return self.rules[nt]
+X
+X    def lex(self, input, patterns):
+X        ret = []
+X        for string in input.split():
+X            while string != "":
+X                longest = ("", "")
+X                for term in self.terms:
+X                    if string.startswith(term):
+X                        longest = longest if len(longest[1]) >= len(term) else (term, term)
+X                for token, pattern in patterns:
+X                    mat = re.match(pattern, string)
+X                    if mat:
+X                        longest = longest if len(longest[1]) >= mat.end() else (token, string[:mat.end()])
+X                if longest == ("", ""):
+X                    longest = ("", string[0])
+X                string = string[len(longest[1]):].strip()
+X                ret.append(longest)
+X        return ret
+X
+X    def parse(self, tokens):
+X        newstart = item(self.start + "'", (self.start,))
+X        table = [earleyset() for _ in range(len(tokens) + 1)]
+X        table[0].add(newstart, 0, 0, None)
+X        for i in range(len(table)):
+X            for eitem in table[i]:
+X                it, origin = eitem.item, eitem.origin
+X                if not it.is_reduce():
+X                    if it.prod == ("#",):
+X                        table[i].add(it.advanced(), i, i, eitem)
+X                    elif it.current() in self.nonterms:
+X                        for prod in self[it.current()]:
+X                            table[i].add(item(it.current(), prod), i, i, eitem)
+X                    else:
+X                        if i < len(tokens) and it.current() == tokens[i][0]:
+X                            table[i + 1].add(it.advanced(), origin, i + 1, eitem)
+X                else:
+X                    for eitem2 in table[origin]:
+X                        it2, origin2 = eitem2.item, eitem2.origin
+X                        if not it2.is_reduce() and it2.current() == it.nt:
+X                            table[i].add(it2.advanced(), origin2, i, eitem)
+X        tokenstomatch = list(tokens)
+X
+X        """
+X        to view the table:
+X
+X        for x, i in zip(table, range(len(table))):
+X            print(str(i) + " '" + (tokens[i][0] if i < len(tokens) else "FINAL STATE") + "':")
+X            for y in x:
+X                print(str(y))
+X            print()
+X            
+X        """
+X
+X        stack = [earleyitem(newstart.advanced(), 0, len(table) - 1)]
+X        if stack[0] not in table[len(table) - 1]:
+X            return None
+X        path = []
+X        while len(stack) > 0:
+X            current = stack.pop()
+X            if current.index == -1:
+X                current = earleyitem(current.item, current.origin, path[len(path) - 1].index)
+X            path.append(current)
+X            if current in table[len(tokenstomatch)].prev and None in table[len(tokenstomatch)].prev[current]:
+X                continue
+X            if current.item.dotpos == 0:
+X                tomatch = stack.pop()
+X                if tomatch.item.dotpos > 0:
+X                    stack.append(table[current.index].prev[current].get(tomatch))
+X            else:
+X                tomatchtoken = current.item.previous()
+X                target = earleyitem(current.item.retarded(), current.origin, -1)
+X                if tomatchtoken in self.terms and tomatchtoken == tokenstomatch[
+X                    len(tokenstomatch) - 1][0] or tomatchtoken == "#":
+X                    if tomatchtoken != "#":
+X                        tokenstomatch.pop()
+X                    stack.append(table[current.index].prev[current].get(target))
+X                else:
+X                    prospect = None
+X                    for x in table[current.index].prev[current]:
+X                        if x.item.nt == tomatchtoken:
+X                            prospect = x
+X                            break
+X                    stack.append(target)
+X                    stack.append(prospect)
+X        enum = iter(path)
+X        eitem = next(enum, None)
+X
+X        def completerule():
+X            nonlocal eitem
+X            if not eitem:
+X                return None
+X            elif eitem.item.is_reduce():
+X                children = []
+X                old = eitem.item
+X                for token in reversed(eitem.item.prod):
+X                    eitem = next(enum, None)
+X                    children.append(completerule())
+X                return treenode(old, old.nt, list(reversed([x for x in children if x is not None])))
+X            elif eitem.item.current() in self.nonterms:
+X                eitem = next(enum, None)
+X                if not eitem:
+X                    return None
+X                return completerule()
+X            elif eitem.item.current() == "#":
+X                return treenode(eitem.item, "#")
+X            else:
+X                return treenode(eitem.item, tokens[eitem.index][1])
+X
+X        return completerule().children[0]
+SHAR_EOF
+  (set 20 19 11 26 10 21 04 'grammar.py'; eval "$shar_touch") &&
+  chmod 0644 'grammar.py'
+if test $? -ne 0
+then ${echo} 'restore of grammar.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'grammar.py: MD5 check failed'
+       ) << \SHAR_EOF
+c14f970dd4c6402e4a730dbe60df3a56  grammar.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'grammar.py'` -ne 8107 && \
+  ${echo} 'restoration warning:  size of grammar.py is not 8107'
+  fi
+fi
+# ============= Lexer.py ==============
+if test -f 'Lexer.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Lexer.py (file already exists)'
+else
+${echo} 'x - extracting Lexer.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Lexer.py' &&
+import sys
+import re
+X
+regexes = [
+X    ("ID", r"[a-zA-Z]+"),
+X    ("NUM", r"[0-9]+"),
+X    ("TYPE", r"int|void"),
+X    ("KEYWORD", r"if|else|while|return"),
+X    ("DELIM", r"[,()\[\]{};]"),
+X    ("ADDOP", r"[+\-]"),
+X    ("MULOP", r"[*/]"),
+X    ("=", "="),
+X    ("RELOP", r">=|<=|==|!=|>|<"),
+]
+X
+if len(sys.argv) != 2:
+X    print("Usage: " + sys.argv[0] + " [filename]")
+X
+comment = False
+for line in open(sys.argv[1], "r"):
+X    if line.strip() == "":
+X        continue
+X    print("Input: '" + line.strip() + "'")
+X    line = line.strip()
+X    while line != "":
+X        if not comment:
+X            if line.startswith("//"):
+X                break
+X            if line.startswith("/*"):
+X                line = line[2:]
+X                comment = True
+X                continue
+X            longest = ("ERROR", line[0])
+X            for token, pattern in regexes:
+X                mat = re.match(pattern, line)
+X                if mat:
+X                    longest = longest if len(longest[1]) > mat.end() else (token, line[:mat.end()])
+X            print(longest[0] + ": " + longest[1])
+X            line = line[len(longest[1]):]
+X            line = line.strip()
+X        else:
+X            mat = re.match(r".*?\*/", line)
+X            if not mat:
+X                line = ""
+X            else:
+X                line = line[mat.end():].strip()
+X                comment = False
+if comment:
+X    print("ERROR: Block comment not closed")
+SHAR_EOF
+  (set 20 19 11 26 10 20 56 'Lexer.py'; eval "$shar_touch") &&
+  chmod 0644 'Lexer.py'
+if test $? -ne 0
+then ${echo} 'restore of Lexer.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Lexer.py: MD5 check failed'
+       ) << \SHAR_EOF
+e9942b5bdc074b0ad5c354a842c06af4  Lexer.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Lexer.py'` -ne 1399 && \
+  ${echo} 'restoration warning:  size of Lexer.py is not 1399'
+  fi
+fi
+# ============= Makefile ==============
+if test -f 'Makefile' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Makefile (file already exists)'
+else
+${echo} 'x - extracting Makefile (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Makefile' &&
+all:
+X	@echo 'No compilation needed. Project in python.'
+SHAR_EOF
+  (set 20 19 11 26 10 28 43 'Makefile'; eval "$shar_touch") &&
+  chmod 0644 'Makefile'
+if test $? -ne 0
+then ${echo} 'restore of Makefile failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Makefile: MD5 check failed'
+       ) << \SHAR_EOF
+d70cfca0d505b4cdf492d7bfe93905f5  Makefile
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Makefile'` -ne 56 && \
+  ${echo} 'restoration warning:  size of Makefile is not 56'
+  fi
+fi
+# ============= orderedset.py ==============
+if test -f 'orderedset.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING orderedset.py (file already exists)'
+else
+${echo} 'x - extracting orderedset.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'orderedset.py' &&
+class orderedset:
+X    def __init__(self, iterable=None):
+X        if not iterable:
+X            iterable = []
+X        self.dict = {}
+X        self.list = []
+X        for item in iterable:
+X            self.add(item)
+X
+X    def __contains__(self, item):
+X        return item in self.dict
+X
+X    def __iter__(self):
+X        i = 0
+X        while i < len(self.list):
+X            yield self.list[i]
+X            i += 1
+X
+X    def get(self, item):
+X        return self.list[self.dict[item]]
+X
+X    def __getitem__(self, index):
+X        return self.list[index]
+X
+X    def add(self, item):
+X        if item in self.dict:
+X            return
+X        self.list.append(item)
+X        self.dict[item] = len(self.list) - 1
+X
+X    def __str__(self):
+X        return "{" + ", ".join(str(x) for x in self.list) + "}"
+SHAR_EOF
+  (set 20 19 11 26 10 21 04 'orderedset.py'; eval "$shar_touch") &&
+  chmod 0644 'orderedset.py'
+if test $? -ne 0
+then ${echo} 'restore of orderedset.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'orderedset.py: MD5 check failed'
+       ) << \SHAR_EOF
+3fa9b0ecfddd0f2aa6692fd72be2df37  orderedset.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'orderedset.py'` -ne 776 && \
+  ${echo} 'restoration warning:  size of orderedset.py is not 776'
+  fi
+fi
+# ============= p5 ==============
+if test -f 'p5' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING p5 (file already exists)'
+else
+${echo} 'x - extracting p5 (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'p5' &&
+#!/bin/bash
+python3.6 Parser.py $1
+SHAR_EOF
+  (set 20 19 11 26 10 28 43 'p5'; eval "$shar_touch") &&
+  chmod 0755 'p5'
+if test $? -ne 0
+then ${echo} 'restore of p5 failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'p5: MD5 check failed'
+       ) << \SHAR_EOF
+906bad863306fdca580f8cac2e7523b1  p5
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'p5'` -ne 35 && \
+  ${echo} 'restoration warning:  size of p5 is not 35'
+  fi
+fi
+# ============= Parser.py ==============
+if test -f 'Parser.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Parser.py (file already exists)'
+else
+${echo} 'x - extracting Parser.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Parser.py' &&
+#!/usr/bin/python
+from grammar import grammar
+from SemAnalyzer import analyze_prgm, SemAnalyzerException
+from CodeGen import default_gen
+import sys
+import re
+X
+patterns = [
+X    ("RELOP", r">=|<=|==|!=|>|<"),
+X    ("ADDOP", r"\+|-"),
+X    ("MULOP", r"\*|/"),
+X    ("NUM", r"\d+"),
+X    ("ID", r"[A-Za-z]+")
+]
+X
+cfg = [
+X    "program -> declaration-list",
+X    "declaration-list -> declaration-list declaration | declaration",
+X    "declaration -> var-declaration | fun-declaration",
+X    "var-declaration -> type-specifier ID ; | type-specifier ID [ NUM ] ;",
+X    "type-specifier -> int | void",
+X    "fun-declaration -> type-specifier ID ( params ) compound-stmt",
+X    "params -> param-list | void",
+X    "param-list -> param-list , param | param",
+X    "param -> type-specifier ID | type-specifier ID [ ]",
+X    "compound-stmt -> { local-declarations statement-list }",
+X    "local-declarations -> local-declarations var-declaration | #",
+X    "statement-list -> statement-list statement | #",
+X    "statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt",
+X    "expression-stmt -> expression ; | ;",
+X    "selection-stmt -> if ( expression ) statement | if ( expression ) statement else statement",
+X    "iteration-stmt -> while ( expression ) statement",
+X    "return-stmt -> return ; | return expression ;",
+X    "expression -> var = expression | simple-expression",
+X    "var -> ID | ID [ expression ]",
+X    "simple-expression -> additive-expression RELOP additive-expression | additive-expression",
+X    "additive-expression -> additive-expression ADDOP term | term",
+X    "term -> term MULOP factor | factor",
+X    "factor -> ( expression ) | var | call | NUM",
+X    "call -> ID ( args )",
+X    "args -> arg-list | #",
+X    "arg-list -> arg-list , expression | expression"
+]
+X
+string = "\n".join(re.sub(r"//.*$", "", x) for x in re.sub(r"/\*.*?\*/", "", open(sys.argv[1], "r").read(), flags=re.MULTILINE | re.DOTALL).split("\n"))
+gram = grammar(cfg)
+x = gram.parse(gram.lex(string, patterns))
+X
+# print(repr(x))
+X
+if not x:
+X    print("REJECT")
+X    exit(0)
+try:
+X    analyze_prgm(x)
+X    # print("ACCEPT")
+except SemAnalyzerException as e:
+X    print("REJECT")
+X    exit(0)
+y = default_gen(x)
+print("\n".join(" ".join(str(z).ljust(12) for z in x) for x in y))
+X
+SHAR_EOF
+  (set 20 19 11 26 10 21 04 'Parser.py'; eval "$shar_touch") &&
+  chmod 0755 'Parser.py'
+if test $? -ne 0
+then ${echo} 'restore of Parser.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Parser.py: MD5 check failed'
+       ) << \SHAR_EOF
+3ad4701a3e0cfa63e4e13fbf201a71b7  Parser.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Parser.py'` -ne 2269 && \
+  ${echo} 'restoration warning:  size of Parser.py is not 2269'
+  fi
+fi
+# ============= SemAnalyzer.py ==============
+if test -f 'SemAnalyzer.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING SemAnalyzer.py (file already exists)'
+else
+${echo} 'x - extracting SemAnalyzer.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'SemAnalyzer.py' &&
+from grammar import item, treenode
+X
+X
+class SemAnalyzerException(Exception):
+X    pass
+X
+X
+functab = {}
+last_dec_main = False
+last_func = None
+return_hit = True
+vartab = [{}]
+param_flag = False
+X
+X
+def functab_search(id):
+X    if id in functab:
+X        return functab[id]
+X    raise SemAnalyzerException()
+X
+X
+def functab_push(type, id, params):
+X    global last_func
+X    global return_hit
+X    if id in functab:
+X        raise SemAnalyzerException()
+X    last_func = (type, params)
+X    return_hit = type == "void"
+X    functab[id] = last_func
+X
+X
+def vartab_search(id):
+X    for vt in reversed(vartab):
+X        if id in vt:
+X            return vt[id]
+X    raise SemAnalyzerException()
+X
+X
+def vartab_push(type, id, is_arr):
+X    if id in vartab[len(vartab) - 1]:
+X        raise SemAnalyzerException()
+X    vartab[len(vartab) - 1][id] = (type, is_arr)
+X
+X
+def analyze_expr(expr):
+X    if len(expr.children) == 3:
+X        var = expr.children[0]
+X        analyze_var(var)
+X        var_is_arr_deref = len(var.children) == 4
+X        res = vartab_search(var.children[0].token)
+X        if res[1] != var_is_arr_deref:
+X            raise SemAnalyzerException()
+X        if (res[0], res[1] and not var_is_arr_deref) != analyze_expr(expr.children[2]):
+X            raise SemAnalyzerException()
+X        return res[0], res[1] and not var_is_arr_deref
+X    else:
+X        return analyze_simple_expr(expr.children[0])
+X
+X
+def analyze_simple_expr(expr):
+X    if len(expr.children) == 3:
+X        r1 = analyze_additive_expr(expr.children[0])
+X        r2 = analyze_additive_expr(expr.children[2])
+X        if r1[0] == "void" or r1[1] or r1 != r2:
+X            raise SemAnalyzerException()
+X        return "int", False
+X    else:
+X        return analyze_additive_expr(expr.children[0])
+X
+X
+def analyze_additive_expr(expr):
+X    if len(expr.children) == 3:
+X        r1 = analyze_additive_expr(expr.children[0])
+X        r2 = analyze_term(expr.children[2])
+X        if r1[0] == "void" or r1[1] or r1 != r2:
+X            raise SemAnalyzerException()
+X        return r1
+X    else:
+X        return analyze_term(expr.children[0])
+X
+X
+def analyze_term(expr):
+X    if len(expr.children) == 3:
+X        r1 = analyze_term(expr.children[0])
+X        r2 = analyze_factor(expr.children[2])
+X        if r1[0] == "void" or r1[1] or r1 != r2:
+X            raise SemAnalyzerException()
+X        return r1
+X    else:
+X        return analyze_factor(expr.children[0])
+X
+X
+def analyze_factor(expr):
+X    c = expr.children[0]
+X
+X    if len(expr.children) == 3:
+X        return analyze_expr(expr.children[1])
+X    elif c.item.nt == "var":
+X        return analyze_var(c)
+X    elif c.item.nt == "call":
+X        return analyze_call(c)
+X    else:
+X        return "int", False
+X
+X
+def analyze_var(v):
+X    res = vartab_search(v.children[0].token)
+X    res_is_arr_deref = len(v.children) == 4
+X    if res_is_arr_deref:
+X        if analyze_expr(v.children[2]) != ("int", False):
+X            raise SemAnalyzerException()
+X    return res[0], res[1] and not res_is_arr_deref
+X
+X
+def compare_params(params, args):
+X    def compare_single(param, arg):
+X        if (param.children[0].children[0].token, len(param.children) == 4) != analyze_expr(arg):
+X            raise SemAnalyzerException()
+X
+X    if params.item.prod == ("void",):
+X        if args.children[0].item.prod != ("#",):
+X            raise SemAnalyzerException()
+X        return
+X    pp = params.children[0]
+X    aa = args.children[0]
+X
+X    def compare_params_rec(p, a):
+X        if len(p.children) != len(a.children):
+X            raise SemAnalyzerException()
+X        if len(p.children) == 1:
+X            compare_single(p.children[0], a.children[0])
+X        else:
+X            compare_single(p.children[2], a.children[2])
+X            compare_params_rec(p.children[0], a.children[0])
+X
+X    compare_params_rec(pp, aa)
+X
+X
+def analyze_call(c):
+X    f = functab_search(c.children[0].token)
+X    compare_params(f[1], c.children[2])
+X    return f[0], False
+X
+X
+def analyze_vardec(vd):
+X    global last_dec_main
+X
+X    vartab_push(vd.children[0].children[0].token, vd.children[1].token, len(vd.children) == 6)
+X    if vd.children[0].children[0].token == "void":
+X        raise SemAnalyzerException()
+X    if len(vartab) == 1:
+X        last_dec_main = False
+X
+X
+def analyze_fundec(fd):
+X    global last_dec_main
+X
+X    if not return_hit:
+X        raise SemAnalyzerException()
+X    dec = fd.children[0].children[0].token, fd.children[1].token, fd.children[3]
+X    functab_push(*dec)
+X    last_dec_main = dec[0] == "void" and dec[1] == "main" and dec[2].children[0].token == "void"
+X
+X
+def analyze_params(pl):
+X    global param_flag
+X    param_flag = True
+X    vartab.append({})
+X
+X
+def analyze_param(p):
+X    if p.children[0].children[0].token == "void":
+X        raise SemAnalyzerException("cannot have void parameters")
+X    vartab_push(p.children[0].children[0].token, p.children[1].token, len(p.children) == 4)
+X
+X
+def analyze_compound_stmt(cps):
+X    global param_flag
+X    global vartab
+X    if not param_flag:
+X        vartab.append({})
+X    param_flag = False
+X    for child in cps:
+X        analyze(child)
+X    vartab = vartab[:-1]
+X
+X
+def analyze_control_stmt(cs):
+X    if analyze_expr(cs.children[2]) != ("int", False):
+X        raise SemAnalyzerException()
+X
+X
+def analyze_return_stmt(rs):
+X    global return_hit
+X    if len(rs.children) == 2:
+X        if last_func[0] != "void":
+X            raise SemAnalyzerException()
+X    else:
+X        if last_func[0] == "void":
+X            raise SemAnalyzerException()
+X        res = analyze_expr(rs.children[1])
+X        if res[1]:
+X            raise SemAnalyzerException()
+X        if last_func[0] != res[0]:
+X            raise SemAnalyzerException()
+X    return_hit = True
+X
+X
+analyzers = {
+X    "expression": (analyze_expr, False),
+X    "simple-expression": (analyze_simple_expr, False),
+X    "additive-expression": (analyze_additive_expr, False),
+X    "term": (analyze_term, False),
+X    "factor": (analyze_factor, False),
+X    "var": (analyze_var, False),
+X    "call": (analyze_call, False),
+X    "param": (analyze_param, False),
+X    "var-declaration": (analyze_vardec, False),
+X    "fun-declaration": (analyze_fundec, True),
+X    "params": (analyze_params, True),
+X    "selection-stmt": (analyze_control_stmt, True),
+X    "iteration-stmt": (analyze_control_stmt, True),
+X    "return-stmt": (analyze_return_stmt, False),
+X    "compound-stmt": (analyze_compound_stmt, False)
+}
+X
+X
+def analyze(root):
+X    if not root.item.is_reduce():
+X        return
+X
+X    if root.item.nt in analyzers:
+X        func, cont = analyzers[root.item.nt]
+X        func(root)
+X        if not cont:
+X            return
+X
+X    for child in root:
+X        analyze(child)
+X
+X
+def analyze_prgm(prgm):
+X    for child in prgm:
+X        analyze(child)
+X    if not last_dec_main:
+X        raise SemAnalyzerException()
+X    if not return_hit:
+X        raise SemAnalyzerException()
+SHAR_EOF
+  (set 20 19 11 26 10 21 04 'SemAnalyzer.py'; eval "$shar_touch") &&
+  chmod 0644 'SemAnalyzer.py'
+if test $? -ne 0
+then ${echo} 'restore of SemAnalyzer.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'SemAnalyzer.py: MD5 check failed'
+       ) << \SHAR_EOF
+545d39ce2a0c719f6332d3d027aeaa93  SemAnalyzer.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'SemAnalyzer.py'` -ne 6710 && \
+  ${echo} 'restoration warning:  size of SemAnalyzer.py is not 6710'
+  fi
+fi
+# ============= testcase.cm ==============
+if test -f 'testcase.cm' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING testcase.cm (file already exists)'
+else
+${echo} 'x - extracting testcase.cm (binary)'
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 testcase.cm
+M:6YT('-U8BAI;G0@82P@:6YT(&);72D@>PH@("`@:6YT(&,["B`@("!I;G0@
+M9%LQ73L*"B`@("!C(#T@8ELR("L@,UT["B`@("!D6S0@*R`U("H@-ET@/2`W
+M("H@."`K(#D["B`@("`Q,"`J("@Q,2`K(#$R*3L*("`@(#$S("L@*"@Q-"DI
+M.PH*("`@(&EF("AD6S)=*2!["B`@("`@("`@8R`](#$U.PH@("`@("`@(&,@
+M/2`Q-CL*("`@("`@("!R971U<FX@8R`O(#$W("H@,3@["B`@("!]"B`@("!E
+M;'-E('L*("`@("`@("!C(#T@,3D@+2`R,"`O(#(Q.PH@("`@?0H*("`@(&EF
+M("AC("T@,C(I"B`@("`@("`@8R`](#(S("T@,C0["@H@("`@=VAI;&4H8R`K
+M(&1;,C5=(#P](&1;,C9=("H@*&1;,C<@*R`R.%T@+2!C*2D*("`@("`@("!C
+M(#T@8R`M(#(Y("\@,S`["@H@("`@<F5T=7)N(&1;,S%=.PI]"@II;G0@93L*
+M:6YT(&9;,S)=.PH*=F]I9"!M86EN*'9O:60I('L*("`@(&EN="!G.PH@("`@
+M:6YT(&A;,S-=.PH*("`@(&4@/2!S=6(H92P@9BD["B`@("!F6S,T72`]('-U
+M8BAH6W-U8BAG("L@,S4@+2!H6S,V("L@,S==("H@*#,X("L@,SDI+"!F*2`O
+M(#0P72P@:"D["@H@("`@92`A/2!F6S0Q73L*("`@(&4@*R!F6S0R73L*("`@
+M(&4@*B!F6S0S73L*("`@(&9;-#1=(#T@92`^(&9;-#5=.PH@("`@:68@*&4I
+A('L*("`@("`@("!M86EN*"D["B`@("!]"B`@("![?0I]
+`
+end
+SHAR_EOF
+  (set 20 19 11 26 10 20 56 'testcase.cm'; eval "$shar_touch") &&
+  chmod 0644 'testcase.cm'
+if test $? -ne 0
+then ${echo} 'restore of testcase.cm failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'testcase.cm: MD5 check failed'
+       ) << \SHAR_EOF
+1c970ffbd5632540755b18ea1f0dcff6  testcase.cm
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'testcase.cm'` -ne 663 && \
+  ${echo} 'restoration warning:  size of testcase.cm is not 663'
+  fi
+fi
+# ============= TestLexer.py ==============
+if test -f 'TestLexer.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING TestLexer.py (file already exists)'
+else
+${echo} 'x - extracting TestLexer.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'TestLexer.py' &&
+import unittest
+X
+X
+class MyTestCase(unittest.TestCase):
+X    def test_something(self):
+X        self.assertEqual(True, False)
+X
+X
+if __name__ == '__main__':
+X    unittest.main()
+SHAR_EOF
+  (set 20 19 11 26 10 20 56 'TestLexer.py'; eval "$shar_touch") &&
+  chmod 0644 'TestLexer.py'
+if test $? -ne 0
+then ${echo} 'restore of TestLexer.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'TestLexer.py: MD5 check failed'
+       ) << \SHAR_EOF
+b6862cb654e3b15abbde50055b4e2e28  TestLexer.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'TestLexer.py'` -ne 172 && \
+  ${echo} 'restoration warning:  size of TestLexer.py is not 172'
+  fi
+fi
+# ============= typescript ==============
+if test -f 'typescript' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING typescript (file already exists)'
+else
+${echo} 'x - extracting typescript (binary)'
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 typescript
+M4V-R:7!T('-T87)T960@;VX@5'5E(#(V($YO=B`R,#$Y(#$P.C(X.C0S($%-
+M($535`H;6S\Q,#,T:&)A<V@M-"XQ)"!U;G-H87(@9FX-"B]H;VUE+S0P+VXP
+M,3,V-S8T,"]P-2]T97-T+V9N.@T*>"`M(&-R96%T960@;&]C:R!D:7)E8W1O
+M<GD@8%]S:#(R-3`U)RX-"G@@+2!E>'1R86-T:6YG($-O9&5'96XN<'D@*'1E
+M>'0I#0IX("T@97AT<F%C=&EN9R!D;V,N='AT("AT97AT*0T*>"`M(&5X=')A
+M8W1I;F<@9W)A;6UA<BYP>2`H=&5X="D-"G@@+2!E>'1R86-T:6YG($QE>&5R
+M+G!Y("AT97AT*0T*>"`M(&5X=')A8W1I;F<@36%K969I;&4@*'1E>'0I#0IX
+M("T@97AT<F%C=&EN9R!O<F1E<F5D<V5T+G!Y("AT97AT*0T*>"`M(&5X=')A
+M8W1I;F<@<#4@*'1E>'0I#0IX("T@97AT<F%C=&EN9R!087)S97(N<'D@*'1E
+M>'0I#0IX("T@97AT<F%C=&EN9R!396U!;F%L>7IE<BYP>2`H=&5X="D-"G@@
+M+2!E>'1R86-T:6YG('1E<W1C87-E+F-M("AB:6YA<GDI#0IX("T@97AT<F%C
+M=&EN9R!497-T3&5X97(N<'D@*'1E>'0I#0IX("T@<F5M;W9E9"!L;V-K(&1I
+M<F5C=&]R>2!@7W-H,C(U,#4G+@T*8F%S:"TT+C$D(&UA:V4-"DYO(&-O;7!I
+M;&%T:6]N(&YE961E9"X@4')O:F5C="!I;B!P>71H;VXN#0IB87-H+30N,20@
+M8V%T('1E<W1C87-E+F-M#0II;G0@<W5B*&EN="!A+"!I;G0@8EM=*2![#0H@
+M("`@:6YT(&,[#0H@("`@:6YT(&1;,5T[#0H-"B`@("!C(#T@8ELR("L@,UT[
+M#0H@("`@9%LT("L@-2`J(#9=(#T@-R`J(#@@*R`Y.PT*("`@(#$P("H@*#$Q
+M("L@,3(I.PT*("`@(#$S("L@*"@Q-"DI.PT*#0H@("`@:68@*&1;,ETI('L-
+M"B`@("`@("`@8R`](#$U.PT*("`@("`@("!C(#T@,38[#0H@("`@("`@(')E
+M='5R;B!C("\@,3<@*B`Q.#L-"B`@("!]#0H@("`@96QS92![#0H@("`@("`@
+M(&,@/2`Q.2`M(#(P("\@,C$[#0H@("`@?0T*#0H@("`@:68@*&,@+2`R,BD-
+M"B`@("`@("`@8R`](#(S("T@,C0[#0H-"B`@("!W:&EL92AC("L@9%LR-5T@
+M/#T@9%LR-ET@*B`H9%LR-R`K(#(X72`M(&,I*0T*("`@("`@("!C(#T@8R`M
+M(#(Y("\@,S`[#0H-"B`@("!R971U<FX@9%LS,5T[#0I]#0H-"FEN="!E.PT*
+M:6YT(&9;,S)=.PT*#0IV;VED(&UA:6XH=F]I9"D@>PT*("`@(&EN="!G.PT*
+M("`@(&EN="!H6S,S73L-"@T*("`@(&4@/2!S=6(H92P@9BD[#0H@("`@9ELS
+M-%T@/2!S=6(H:%MS=6(H9R`K(#,U("T@:%LS-B`K(#,W72`J("@S."`K(#,Y
+M*2P@9BD@+R`T,%TL(&@I.PT*#0H@("`@92`A/2!F6S0Q73L-"B`@("!E("L@
+M9ELT,ET[#0H@("`@92`J(&9;-#-=.PT*("`@(&9;-#1=(#T@92`^(&9;-#5=
+M.PT*("`@(&EF("AE*2![#0H@("`@("`@(&UA:6XH*3L-"B`@("!]#0H@("`@
+M>WT-"GUB87-H+30N,20@+B]P-2!T97-T8V%S92YC;0T*,"`@("`@("`@("`@
+M(&9U;F,@("`@("`@("!S=6(@("`@("`@("`@:6YT("`@("`@("`@(#(@("`@
+M("`@("`@(`T*,2`@("`@("`@("`@('!A<F%M("`@("`@("`@("`@("`@("`@
+M("`@("`@("`@("`@("`@(&$@("`@("`@("`@(`T*,B`@("`@("`@("`@('!A
+M<F%M("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@(&(@("`@("`@
+M("`@(`T*,R`@("`@("`@("`@(&%L;&]C("`@("`@("`T("`@("`@("`@("`@
+M("`@("`@("`@("`@(&,@("`@("`@("`@(`T*-"`@("`@("`@("`@(&%L;&]C
+M("`@("`@("`T("`@("`@("`@("`@("`@("`@("`@("`@(&0@("`@("`@("`@
+M(`T*-2`@("`@("`@("`@(&%D9"`@("`@("`@("`R("`@("`@("`@("`@,R`@
+M("`@("`@("`@(%]T,"`@("`@("`@(`T*-B`@("`@("`@("`@(&UU;"`@("`@
+M("`@("!?=#`@("`@("`@("`@-"`@("`@("`@("`@(%]T,2`@("`@("`@(`T*
+M-R`@("`@("`@("`@(&1I<W`@("`@("`@("!B("`@("`@("`@("`@7W0Q("`@
+M("`@("`@(%]T,B`@("`@("`@(`T*."`@("`@("`@("`@(&%S<V=N("`@("`@
+M("!?=#(@("`@("`@("`@("`@("`@("`@("`@(&,@("`@("`@("`@(`T*.2`@
+M("`@("`@("`@(&UU;"`@("`@("`@("`U("`@("`@("`@("`@-B`@("`@("`@
+M("`@(%]T,R`@("`@("`@(`T*,3`@("`@("`@("`@(&%D9"`@("`@("`@("`T
+M("`@("`@("`@("`@7W0S("`@("`@("`@(%]T-"`@("`@("`@(`T*,3$@("`@
+M("`@("`@(&UU;"`@("`@("`@("!?=#0@("`@("`@("`@-"`@("`@("`@("`@
+M(%]T-2`@("`@("`@(`T*,3(@("`@("`@("`@(&1I<W`@("`@("`@("!D("`@
+M("`@("`@("`@7W0U("`@("`@("`@(%]T-B`@("`@("`@(`T*,3,@("`@("`@
+M("`@(&UU;"`@("`@("`@("`W("`@("`@("`@("`@."`@("`@("`@("`@(%]T
+M-R`@("`@("`@(`T*,30@("`@("`@("`@(&%D9"`@("`@("`@("!?=#<@("`@
+M("`@("`@.2`@("`@("`@("`@(%]T."`@("`@("`@(`T*,34@("`@("`@("`@
+M(&%S<V=N("`@("`@("!?=#@@("`@("`@("`@("`@("`@("`@("`@(%]T-B`@
+M("`@("`@(`T*,38@("`@("`@("`@(&%D9"`@("`@("`@("`Q,2`@("`@("`@
+M("`@,3(@("`@("`@("`@(%]T.2`@("`@("`@(`T*,3<@("`@("`@("`@(&UU
+M;"`@("`@("`@("`Q,"`@("`@("`@("`@7W0Y("`@("`@("`@(%]T,3`@("`@
+M("`@(`T*,3@@("`@("`@("`@(&%D9"`@("`@("`@("`Q,R`@("`@("`@("`@
+M,30@("`@("`@("`@(%]T,3$@("`@("`@(`T*,3D@("`@("`@("`@(&UU;"`@
+M("`@("`@("`R("`@("`@("`@("`@-"`@("`@("`@("`@(%]T,3(@("`@("`@
+M(`T*,C`@("`@("`@("`@(&1I<W`@("`@("`@("!D("`@("`@("`@("`@7W0Q
+M,B`@("`@("`@(%]T,3,@("`@("`@(`T*,C$@("`@("`@("`@(&-O;7!R("`@
+M("`@("!?=#$S("`@("`@("`@,"`@("`@("`@("`@(%]T,30@("`@("`@(`T*
+M,C(@("`@("`@("`@(&)R97$@("`@("`@("!?=#$T("`@("`@("`@("`@("`@
+M("`@("`@(#(Y("`@("`@("`@(`T*,C,@("`@("`@("`@(&%S<V=N("`@("`@
+M("`Q-2`@("`@("`@("`@("`@("`@("`@("`@(&,@("`@("`@("`@(`T*,C0@
+M("`@("`@("`@(&%S<V=N("`@("`@("`Q-B`@("`@("`@("`@("`@("`@("`@
+M("`@(&,@("`@("`@("`@(`T*,C4@("`@("`@("`@(&1I=B`@("`@("`@("!C
+M("`@("`@("`@("`@,3<@("`@("`@("`@(%]T,34@("`@("`@(`T*,C8@("`@
+M("`@("`@(&UU;"`@("`@("`@("!?=#$U("`@("`@("`@,3@@("`@("`@("`@
+M(%]T,38@("`@("`@(`T*,C<@("`@("`@("`@(')E='5R;B`@("`@("`@("`@
+M("`@("`@("`@("`@("`@("`@("`@(%]T,38@("`@("`@(`T*,C@@("`@("`@
+M("`@(&)R("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@(#,R
+M("`@("`@("`@(`T*,CD@("`@("`@("`@(&1I=B`@("`@("`@("`R,"`@("`@
+M("`@("`@,C$@("`@("`@("`@(%]T,3<@("`@("`@(`T*,S`@("`@("`@("`@
+M('-U8B`@("`@("`@("`Q.2`@("`@("`@("`@7W0Q-R`@("`@("`@(%]T,3@@
+M("`@("`@(`T*,S$@("`@("`@("`@(&%S<V=N("`@("`@("!?=#$X("`@("`@
+M("`@("`@("`@("`@("`@(&,@("`@("`@("`@(`T*,S(@("`@("`@("`@('-U
+M8B`@("`@("`@("!C("`@("`@("`@("`@,C(@("`@("`@("`@(%]T,3D@("`@
+M("`@(`T*,S,@("`@("`@("`@(&-O;7!R("`@("`@("!?=#$Y("`@("`@("`@
+M,"`@("`@("`@("`@(%]T,C`@("`@("`@(`T*,S0@("`@("`@("`@(&)R97$@
+M("`@("`@("!?=#(P("`@("`@("`@("`@("`@("`@("`@(#,W("`@("`@("`@
+M(`T*,S4@("`@("`@("`@('-U8B`@("`@("`@("`R,R`@("`@("`@("`@,C0@
+M("`@("`@("`@(%]T,C$@("`@("`@(`T*,S8@("`@("`@("`@(&%S<V=N("`@
+M("`@("!?=#(Q("`@("`@("`@("`@("`@("`@("`@(&,@("`@("`@("`@(`T*
+M,S<@("`@("`@("`@(&UU;"`@("`@("`@("`R-2`@("`@("`@("`@-"`@("`@
+M("`@("`@(%]T,C(@("`@("`@(`T*,S@@("`@("`@("`@(&1I<W`@("`@("`@
+M("!D("`@("`@("`@("`@7W0R,B`@("`@("`@(%]T,C,@("`@("`@(`T*,SD@
+M("`@("`@("`@(&%D9"`@("`@("`@("!C("`@("`@("`@("`@7W0R,R`@("`@
+M("`@(%]T,C0@("`@("`@(`T*-#`@("`@("`@("`@(&UU;"`@("`@("`@("`R
+M-B`@("`@("`@("`@-"`@("`@("`@("`@(%]T,C4@("`@("`@(`T*-#$@("`@
+M("`@("`@(&1I<W`@("`@("`@("!D("`@("`@("`@("`@7W0R-2`@("`@("`@
+M(%]T,C8@("`@("`@(`T*-#(@("`@("`@("`@(&%D9"`@("`@("`@("`R-R`@
+M("`@("`@("`@,C@@("`@("`@("`@(%]T,C<@("`@("`@(`T*-#,@("`@("`@
+M("`@(&UU;"`@("`@("`@("!?=#(W("`@("`@("`@-"`@("`@("`@("`@(%]T
+M,C@@("`@("`@(`T*-#0@("`@("`@("`@(&1I<W`@("`@("`@("!D("`@("`@
+M("`@("`@7W0R."`@("`@("`@(%]T,CD@("`@("`@(`T*-#4@("`@("`@("`@
+M('-U8B`@("`@("`@("!?=#(Y("`@("`@("`@8R`@("`@("`@("`@(%]T,S`@
+M("`@("`@(`T*-#8@("`@("`@("`@(&UU;"`@("`@("`@("!?=#(V("`@("`@
+M("`@7W0S,"`@("`@("`@(%]T,S$@("`@("`@(`T*-#<@("`@("`@("`@(&-O
+M;7!R("`@("`@("!?=#(T("`@("`@("`@7W0S,2`@("`@("`@(%]T,S(@("`@
+M("`@(`T*-#@@("`@("`@("`@(&)R9W0@("`@("`@("!?=#,R("`@("`@("`@
+M("`@("`@("`@("`@(#4S("`@("`@("`@(`T*-#D@("`@("`@("`@(&1I=B`@
+M("`@("`@("`R.2`@("`@("`@("`@,S`@("`@("`@("`@(%]T,S,@("`@("`@
+M(`T*-3`@("`@("`@("`@('-U8B`@("`@("`@("!C("`@("`@("`@("`@7W0S
+M,R`@("`@("`@(%]T,S0@("`@("`@(`T*-3$@("`@("`@("`@(&%S<V=N("`@
+M("`@("!?=#,T("`@("`@("`@("`@("`@("`@("`@(&,@("`@("`@("`@(`T*
+M-3(@("`@("`@("`@(&)R("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@
+M("`@("`@(#,W("`@("`@("`@(`T*-3,@("`@("`@("`@(&UU;"`@("`@("`@
+M("`S,2`@("`@("`@("`@-"`@("`@("`@("`@(%]T,S4@("`@("`@(`T*-30@
+M("`@("`@("`@(&1I<W`@("`@("`@("!D("`@("`@("`@("`@7W0S-2`@("`@
+M("`@(%]T,S8@("`@("`@(`T*-34@("`@("`@("`@(')E='5R;B`@("`@("`@
+M("`@("`@("`@("`@("`@("`@("`@("`@(%]T,S8@("`@("`@(`T*-38@("`@
+M("`@("`@(&5N9"`@("`@("`@("!F=6YC("`@("`@("`@<W5B("`@("`@("`@
+M("`@("`@("`@("`@(`T*-3<@("`@("`@("`@(&%L;&]C("`@("`@("`T("`@
+M("`@("`@("`@("`@("`@("`@("`@(&4@("`@("`@("`@(`T*-3@@("`@("`@
+M("`@(&%L;&]C("`@("`@("`Q,C@@("`@("`@("`@("`@("`@("`@("`@(&8@
+M("`@("`@("`@(`T*-3D@("`@("`@("`@(&9U;F,@("`@("`@("!M86EN("`@
+M("`@("`@=F]I9"`@("`@("`@(#`@("`@("`@("`@(`T*-C`@("`@("`@("`@
+M(&%L;&]C("`@("`@("`T("`@("`@("`@("`@("`@("`@("`@("`@(&<@("`@
+M("`@("`@(`T*-C$@("`@("`@("`@(&%L;&]C("`@("`@("`Q,S(@("`@("`@
+M("`@("`@("`@("`@("`@(&@@("`@("`@("`@(`T*-C(@("`@("`@("`@(&%R
+M9R`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@(&4@("`@("`@
+M("`@(`T*-C,@("`@("`@("`@(&%R9R`@("`@("`@("`@("`@("`@("`@("`@
+M("`@("`@("`@("`@(&8@("`@("`@("`@(`T*-C0@("`@("`@("`@(&-A;&P@
+M("`@("`@("!S=6(@("`@("`@("`@,B`@("`@("`@("`@(%]T,S<@("`@("`@
+M(`T*-C4@("`@("`@("`@(&%S<V=N("`@("`@("!?=#,W("`@("`@("`@("`@
+M("`@("`@("`@(&4@("`@("`@("`@(`T*-C8@("`@("`@("`@(&UU;"`@("`@
+M("`@("`S-"`@("`@("`@("`@-"`@("`@("`@("`@(%]T,S@@("`@("`@(`T*
+M-C<@("`@("`@("`@(&1I<W`@("`@("`@("!F("`@("`@("`@("`@7W0S."`@
+M("`@("`@(%]T,SD@("`@("`@(`T*-C@@("`@("`@("`@(&%D9"`@("`@("`@
+M("!G("`@("`@("`@("`@,S4@("`@("`@("`@(%]T-#`@("`@("`@(`T*-CD@
+M("`@("`@("`@(&%D9"`@("`@("`@("`S-B`@("`@("`@("`@,S<@("`@("`@
+M("`@(%]T-#$@("`@("`@(`T*-S`@("`@("`@("`@(&UU;"`@("`@("`@("!?
+M=#0Q("`@("`@("`@-"`@("`@("`@("`@(%]T-#(@("`@("`@(`T*-S$@("`@
+M("`@("`@(&1I<W`@("`@("`@("!H("`@("`@("`@("`@7W0T,B`@("`@("`@
+M(%]T-#,@("`@("`@(`T*-S(@("`@("`@("`@(&%D9"`@("`@("`@("`S."`@
+M("`@("`@("`@,SD@("`@("`@("`@(%]T-#0@("`@("`@(`T*-S,@("`@("`@
+M("`@(&UU;"`@("`@("`@("!?=#0S("`@("`@("`@7W0T-"`@("`@("`@(%]T
+M-#4@("`@("`@(`T*-S0@("`@("`@("`@('-U8B`@("`@("`@("!?=#0P("`@
+M("`@("`@7W0T-2`@("`@("`@(%]T-#8@("`@("`@(`T*-S4@("`@("`@("`@
+M(&%R9R`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@(%]T-#8@
+M("`@("`@(`T*-S8@("`@("`@("`@(&%R9R`@("`@("`@("`@("`@("`@("`@
+M("`@("`@("`@("`@("`@(&8@("`@("`@("`@(`T*-S<@("`@("`@("`@(&-A
+M;&P@("`@("`@("!S=6(@("`@("`@("`@,B`@("`@("`@("`@(%]T-#<@("`@
+M("`@(`T*-S@@("`@("`@("`@(&1I=B`@("`@("`@("!?=#0W("`@("`@("`@
+M-#`@("`@("`@("`@(%]T-#@@("`@("`@(`T*-SD@("`@("`@("`@(&UU;"`@
+M("`@("`@("!?=#0X("`@("`@("`@-"`@("`@("`@("`@(%]T-#D@("`@("`@
+M(`T*.#`@("`@("`@("`@(&1I<W`@("`@("`@("!H("`@("`@("`@("`@7W0T
+M.2`@("`@("`@(%]T-3`@("`@("`@(`T*.#$@("`@("`@("`@(&%R9R`@("`@
+M("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@(%]T-3`@("`@("`@(`T*
+M.#(@("`@("`@("`@(&%R9R`@("`@("`@("`@("`@("`@("`@("`@("`@("`@
+M("`@("`@(&@@("`@("`@("`@(`T*.#,@("`@("`@("`@(&-A;&P@("`@("`@
+M("!S=6(@("`@("`@("`@,B`@("`@("`@("`@(%]T-3$@("`@("`@(`T*.#0@
+M("`@("`@("`@(&%S<V=N("`@("`@("!?=#4Q("`@("`@("`@("`@("`@("`@
+M("`@(%]T,SD@("`@("`@(`T*.#4@("`@("`@("`@(&UU;"`@("`@("`@("`T
+M,2`@("`@("`@("`@-"`@("`@("`@("`@(%]T-3(@("`@("`@(`T*.#8@("`@
+M("`@("`@(&1I<W`@("`@("`@("!F("`@("`@("`@("`@7W0U,B`@("`@("`@
+M(%]T-3,@("`@("`@(`T*.#<@("`@("`@("`@(&%S<V=N("`@("`@("`P("`@
+M("`@("`@("`@("`@("`@("`@("`@(%]T-30@("`@("`@(`T*.#@@("`@("`@
+M("`@(&-O;7!R("`@("`@("!E("`@("`@("`@("`@7W0U,R`@("`@("`@(%]T
+M-34@("`@("`@(`T*.#D@("`@("`@("`@(&)R97$@("`@("`@("!?=#4U("`@
+M("`@("`@("`@("`@("`@("`@(#DQ("`@("`@("`@(`T*.3`@("`@("`@("`@
+M(&%S<V=N("`@("`@("`Q("`@("`@("`@("`@("`@("`@("`@("`@(%]T-30@
+M("`@("`@(`T*.3$@("`@("`@("`@(&UU;"`@("`@("`@("`T,B`@("`@("`@
+M("`@-"`@("`@("`@("`@(%]T-38@("`@("`@(`T*.3(@("`@("`@("`@(&1I
+M<W`@("`@("`@("!F("`@("`@("`@("`@7W0U-B`@("`@("`@(%]T-3<@("`@
+M("`@(`T*.3,@("`@("`@("`@(&%D9"`@("`@("`@("!E("`@("`@("`@("`@
+M7W0U-R`@("`@("`@(%]T-3@@("`@("`@(`T*.30@("`@("`@("`@(&UU;"`@
+M("`@("`@("`T,R`@("`@("`@("`@-"`@("`@("`@("`@(%]T-3D@("`@("`@
+M(`T*.34@("`@("`@("`@(&1I<W`@("`@("`@("!F("`@("`@("`@("`@7W0U
+M.2`@("`@("`@(%]T-C`@("`@("`@(`T*.38@("`@("`@("`@(&UU;"`@("`@
+M("`@("!E("`@("`@("`@("`@7W0V,"`@("`@("`@(%]T-C$@("`@("`@(`T*
+M.3<@("`@("`@("`@(&UU;"`@("`@("`@("`T-"`@("`@("`@("`@-"`@("`@
+M("`@("`@(%]T-C(@("`@("`@(`T*.3@@("`@("`@("`@(&1I<W`@("`@("`@
+M("!F("`@("`@("`@("`@7W0V,B`@("`@("`@(%]T-C,@("`@("`@(`T*.3D@
+M("`@("`@("`@(&UU;"`@("`@("`@("`T-2`@("`@("`@("`@-"`@("`@("`@
+M("`@(%]T-C0@("`@("`@(`T*,3`P("`@("`@("`@(&1I<W`@("`@("`@("!F
+M("`@("`@("`@("`@7W0V-"`@("`@("`@(%]T-C4@("`@("`@(`T*,3`Q("`@
+M("`@("`@(&%S<V=N("`@("`@("`P("`@("`@("`@("`@("`@("`@("`@("`@
+M(%]T-C8@("`@("`@(`T*,3`R("`@("`@("`@(&-O;7!R("`@("`@("!E("`@
+M("`@("`@("`@7W0V-2`@("`@("`@(%]T-C<@("`@("`@(`T*,3`S("`@("`@
+M("`@(&)R;&4@("`@("`@("!?=#8W("`@("`@("`@("`@("`@("`@("`@(#$P
+M-2`@("`@("`@(`T*,3`T("`@("`@("`@(&%S<V=N("`@("`@("`Q("`@("`@
+M("`@("`@("`@("`@("`@("`@(%]T-C8@("`@("`@(`T*,3`U("`@("`@("`@
+M(&%S<V=N("`@("`@("!?=#8V("`@("`@("`@("`@("`@("`@("`@(%]T-C,@
+M("`@("`@(`T*,3`V("`@("`@("`@(&-O;7!R("`@("`@("!E("`@("`@("`@
+M("`@,"`@("`@("`@("`@(%]T-C@@("`@("`@(`T*,3`W("`@("`@("`@(&)R
+M97$@("`@("`@("!?=#8X("`@("`@("`@("`@("`@("`@("`@(#$P.2`@("`@
+M("`@(`T*,3`X("`@("`@("`@(&-A;&P@("`@("`@("!M86EN("`@("`@("`@
+M,"`@("`@("`@("`@("`@("`@("`@("`@(`T*,3`Y("`@("`@("`@(&5N9"`@
+M("`@("`@("!F=6YC("`@("`@("`@;6%I;B`@("`@("`@("`@("`@("`@("`@
+M(`T*8F%S:"TT+C$D(&5X:70-"F5X:70-"@I38W)I<'0@9&]N92!O;B!4=64@
+<,C8@3F]V(#(P,3D@,3`Z,C@Z-#,@04T@15-4"G)I
+`
+end
+SHAR_EOF
+  (set 20 19 11 26 10 28 43 'typescript'; eval "$shar_touch") &&
+  chmod 0644 'typescript'
+if test $? -ne 0
+then ${echo} 'restore of typescript failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'typescript: MD5 check failed'
+       ) << \SHAR_EOF
+ebef874b5a2155c9abf11f768408bdbe  typescript
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'typescript'` -ne 8713 && \
+  ${echo} 'restoration warning:  size of typescript is not 8713'
+  fi
+fi
+if rm -fr ${lock_dir}
+then ${echo} 'x - removed lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to remove lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+exit 0

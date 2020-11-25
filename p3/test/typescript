@@ -1,0 +1,23 @@
+Script started on Wed 16 Oct 2019 10:36:32 AM EDT
+[?1034hbash-4.1$ unshar fn
+/home/40/n01367640/p3/test/fn:
+x - created lock directory `_sh30047'.
+x - extracting doc.txt (text)
+x - extracting lex.l (text)
+x - extracting Makefile (text)
+x - extracting p3 (text)
+x - extracting parser.y (binary)
+x - extracting testcase.sql (text)
+x - removed lock directory `_sh30047'.
+bash-4.1$ make
+bison -d parser.y
+lex lex.l
+gcc -o parser lex.yy.c parser.tab.c
+bash-4.1$ cat testcase.sql
+S RENAME CITY AS CNO
+bash-4.1$ ./p3 testcase.sql
+ACCEPT
+bash-4.1$ exit
+exit
+
+Script done on Wed 16 Oct 2019 10:36:33 AM EDT

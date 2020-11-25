@@ -1,0 +1,14 @@
+Jonathan Lemos
+Compilers Project 3
+Lex/Yacc
+Dr. Eggen
+
+Submitted: 10/15/19
+Due: 10/17/19
+
+Uses some lex/yacc magic to parse a SQL-based grammar. lex generates a lexer
+and yacc generates a parser. The compilation process uses some magic
+to concatenate the two C files together and somehow the whole thing works.
+The output binary takes a single filename as a command-line argument and outputs
+ACCEPT or REJECT depending on the contents of the file. You run it with
+./p3 $filename

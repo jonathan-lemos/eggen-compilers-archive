@@ -1,0 +1,179 @@
+Script started on Tue 26 Nov 2019 10:28:43 AM EST
+[?1034hbash-4.1$ unshar fn
+/home/40/n01367640/p5/test/fn:
+x - created lock directory `_sh22505'.
+x - extracting CodeGen.py (text)
+x - extracting doc.txt (text)
+x - extracting grammar.py (text)
+x - extracting Lexer.py (text)
+x - extracting Makefile (text)
+x - extracting orderedset.py (text)
+x - extracting p5 (text)
+x - extracting Parser.py (text)
+x - extracting SemAnalyzer.py (text)
+x - extracting testcase.cm (binary)
+x - extracting TestLexer.py (text)
+x - removed lock directory `_sh22505'.
+bash-4.1$ make
+No compilation needed. Project in python.
+bash-4.1$ cat testcase.cm
+int sub(int a, int b[]) {
+    int c;
+    int d[1];
+
+    c = b[2 + 3];
+    d[4 + 5 * 6] = 7 * 8 + 9;
+    10 * (11 + 12);
+    13 + ((14));
+
+    if (d[2]) {
+        c = 15;
+        c = 16;
+        return c / 17 * 18;
+    }
+    else {
+        c = 19 - 20 / 21;
+    }
+
+    if (c - 22)
+        c = 23 - 24;
+
+    while(c + d[25] <= d[26] * (d[27 + 28] - c))
+        c = c - 29 / 30;
+
+    return d[31];
+}
+
+int e;
+int f[32];
+
+void main(void) {
+    int g;
+    int h[33];
+
+    e = sub(e, f);
+    f[34] = sub(h[sub(g + 35 - h[36 + 37] * (38 + 39), f) / 40], h);
+
+    e != f[41];
+    e + f[42];
+    e * f[43];
+    f[44] = e > f[45];
+    if (e) {
+        main();
+    }
+    {}
+}bash-4.1$ ./p5 testcase.cm
+0            func         sub          int          2           
+1            param                                  a           
+2            param                                  b           
+3            alloc        4                         c           
+4            alloc        4                         d           
+5            add          2            3            _t0         
+6            mul          _t0          4            _t1         
+7            disp         b            _t1          _t2         
+8            assgn        _t2                       c           
+9            mul          5            6            _t3         
+10           add          4            _t3          _t4         
+11           mul          _t4          4            _t5         
+12           disp         d            _t5          _t6         
+13           mul          7            8            _t7         
+14           add          _t7          9            _t8         
+15           assgn        _t8                       _t6         
+16           add          11           12           _t9         
+17           mul          10           _t9          _t10        
+18           add          13           14           _t11        
+19           mul          2            4            _t12        
+20           disp         d            _t12         _t13        
+21           compr        _t13         0            _t14        
+22           breq         _t14                      29          
+23           assgn        15                        c           
+24           assgn        16                        c           
+25           div          c            17           _t15        
+26           mul          _t15         18           _t16        
+27           return                                 _t16        
+28           br                                     32          
+29           div          20           21           _t17        
+30           sub          19           _t17         _t18        
+31           assgn        _t18                      c           
+32           sub          c            22           _t19        
+33           compr        _t19         0            _t20        
+34           breq         _t20                      37          
+35           sub          23           24           _t21        
+36           assgn        _t21                      c           
+37           mul          25           4            _t22        
+38           disp         d            _t22         _t23        
+39           add          c            _t23         _t24        
+40           mul          26           4            _t25        
+41           disp         d            _t25         _t26        
+42           add          27           28           _t27        
+43           mul          _t27         4            _t28        
+44           disp         d            _t28         _t29        
+45           sub          _t29         c            _t30        
+46           mul          _t26         _t30         _t31        
+47           compr        _t24         _t31         _t32        
+48           brgt         _t32                      53          
+49           div          29           30           _t33        
+50           sub          c            _t33         _t34        
+51           assgn        _t34                      c           
+52           br                                     37          
+53           mul          31           4            _t35        
+54           disp         d            _t35         _t36        
+55           return                                 _t36        
+56           end          func         sub                      
+57           alloc        4                         e           
+58           alloc        128                       f           
+59           func         main         void         0           
+60           alloc        4                         g           
+61           alloc        132                       h           
+62           arg                                    e           
+63           arg                                    f           
+64           call         sub          2            _t37        
+65           assgn        _t37                      e           
+66           mul          34           4            _t38        
+67           disp         f            _t38         _t39        
+68           add          g            35           _t40        
+69           add          36           37           _t41        
+70           mul          _t41         4            _t42        
+71           disp         h            _t42         _t43        
+72           add          38           39           _t44        
+73           mul          _t43         _t44         _t45        
+74           sub          _t40         _t45         _t46        
+75           arg                                    _t46        
+76           arg                                    f           
+77           call         sub          2            _t47        
+78           div          _t47         40           _t48        
+79           mul          _t48         4            _t49        
+80           disp         h            _t49         _t50        
+81           arg                                    _t50        
+82           arg                                    h           
+83           call         sub          2            _t51        
+84           assgn        _t51                      _t39        
+85           mul          41           4            _t52        
+86           disp         f            _t52         _t53        
+87           assgn        0                         _t54        
+88           compr        e            _t53         _t55        
+89           breq         _t55                      91          
+90           assgn        1                         _t54        
+91           mul          42           4            _t56        
+92           disp         f            _t56         _t57        
+93           add          e            _t57         _t58        
+94           mul          43           4            _t59        
+95           disp         f            _t59         _t60        
+96           mul          e            _t60         _t61        
+97           mul          44           4            _t62        
+98           disp         f            _t62         _t63        
+99           mul          45           4            _t64        
+100          disp         f            _t64         _t65        
+101          assgn        0                         _t66        
+102          compr        e            _t65         _t67        
+103          brle         _t67                      105         
+104          assgn        1                         _t66        
+105          assgn        _t66                      _t63        
+106          compr        e            0            _t68        
+107          breq         _t68                      109         
+108          call         main         0                        
+109          end          func         main                     
+bash-4.1$ exit
+exit
+
+Script done on Tue 26 Nov 2019 10:28:43 AM EST

@@ -1,0 +1,27 @@
+Script started on Tue 12 Nov 2019 04:34:24 PM EST
+[?1034hbash-4.1$ unshar fn
+/home/40/n01367640/p4/test/fn:
+x - created lock directory `_sh32104'.
+x - extracting doc.txt (text)
+x - extracting grammar.py (text)
+x - extracting Lexer.py (text)
+x - extracting Makefile (text)
+x - extracting orderedset.py (text)
+x - extracting p4 (text)
+x - extracting Parser.py (text)
+x - extracting SemAnalyzer.py (text)
+x - extracting testcase.cm (text)
+x - extracting TestLexer.py (text)
+x - removed lock directory `_sh32104'.
+bash-4.1$ make
+No compilation needed. Project in python.
+bash-4.1$ cat testcase.cm
+void main(void) {
+	2 + 2;
+}
+bash-4.1$ ./p4 testcase.cm
+ACCEPT
+bash-4.1$ exit
+exit
+
+Script done on Tue 12 Nov 2019 04:34:29 PM EST

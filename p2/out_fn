@@ -1,0 +1,613 @@
+#!/bin/sh
+# This is a shell archive (produced by GNU sharutils 4.7).
+# To extract the files from this archive, save it to some FILE, remove
+# everything before the `#!/bin/sh' line above, then type `sh FILE'.
+#
+lock_dir=_sh02979
+# Made on 2020-01-31 11:49 EST by <n01367640@osprey.unfcsd.unf.edu>.
+# Source directory was `/home/40/n01367640/p2'.
+#
+# Existing files will *not* be overwritten, unless `-c' is specified.
+#
+# This shar contains:
+# length mode       name
+# ------ ---------- ------------------------------------------
+#    250 -rw-r--r-- doc.txt
+#   7571 -rw-r--r-- grammar.py
+#     56 -rw-r--r-- Makefile
+#    776 -rw-r--r-- orderedset.py
+#     35 -rwxr-xr-x p2
+#   1934 -rw-r--r-- Parser.py
+#     30 -rw-r--r-- testcase.cm
+#    652 -rw-r--r-- typescript
+#
+MD5SUM=${MD5SUM-md5sum}
+f=`${MD5SUM} --version | egrep '^md5sum .*(core|text)utils'`
+test -n "${f}" && md5check=true || md5check=false
+${md5check} || \
+  echo 'Note: not verifying md5sums.  Consider installing GNU coreutils.'
+save_IFS="${IFS}"
+IFS="${IFS}:"
+gettext_dir=FAILED
+locale_dir=FAILED
+first_param="$1"
+for dir in $PATH
+do
+  if test "$gettext_dir" = FAILED && test -f $dir/gettext \
+     && ($dir/gettext --version >/dev/null 2>&1)
+  then
+    case `$dir/gettext --version 2>&1 | sed 1q` in
+      *GNU*) gettext_dir=$dir ;;
+    esac
+  fi
+  if test "$locale_dir" = FAILED && test -f $dir/shar \
+     && ($dir/shar --print-text-domain-dir >/dev/null 2>&1)
+  then
+    locale_dir=`$dir/shar --print-text-domain-dir`
+  fi
+done
+IFS="$save_IFS"
+if test "$locale_dir" = FAILED || test "$gettext_dir" = FAILED
+then
+  echo=echo
+else
+  TEXTDOMAINDIR=$locale_dir
+  export TEXTDOMAINDIR
+  TEXTDOMAIN=sharutils
+  export TEXTDOMAIN
+  echo="$gettext_dir/gettext -s"
+fi
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null
+then if (echo -n test; echo 1,2,3) | grep n >/dev/null
+     then shar_n= shar_c='
+'
+     else shar_n=-n shar_c= ; fi
+else shar_n= shar_c='\c' ; fi
+f=shar-touch.$$
+st1=200112312359.59
+st2=123123592001.59
+st2tr=123123592001.5 # old SysV 14-char limit
+st3=1231235901
+
+if touch -am -t ${st1} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st1} && test -f ${f}; then
+  shar_touch='touch -am -t $1$2$3$4$5$6.$7 "$8"'
+
+elif touch -am ${st2} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st2} && test ! -f ${st2tr} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$1$2.$7 "$8"'
+
+elif touch -am ${st3} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st3} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$2 "$8"'
+
+else
+  shar_touch=:
+  echo
+  ${echo} 'WARNING: not restoring timestamps.  Consider getting and'
+  ${echo} 'installing GNU `touch'\'', distributed in GNU coreutils...'
+  echo
+fi
+rm -f ${st1} ${st2} ${st2tr} ${st3} ${f}
+#
+if test ! -d ${lock_dir}
+then : ; else ${echo} 'lock directory '${lock_dir}' exists'
+  exit 1
+fi
+if mkdir ${lock_dir}
+then ${echo} 'x - created lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to create lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+# ============= doc.txt ==============
+if test -f 'doc.txt' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING doc.txt (file already exists)'
+else
+${echo} 'x - extracting doc.txt (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'doc.txt' &&
+[your name]
+[class] Project 2
+[name of project]
+Dr. Eggen
+X
+Submitted: 01/21/20
+Due: [due date]
+X
+[explain the overall design, explain how to run the program, files created, files consumed, special concerns. this should be at least a good paragraph.]
+X
+SHAR_EOF
+  (set 20 20 01 21 12 15 51 'doc.txt'; eval "$shar_touch") &&
+  chmod 0644 'doc.txt'
+if test $? -ne 0
+then ${echo} 'restore of doc.txt failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'doc.txt: MD5 check failed'
+       ) << \SHAR_EOF
+382f8e269531ac8d7fae3e98130df026  doc.txt
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'doc.txt'` -ne 250 && \
+  ${echo} 'restoration warning:  size of doc.txt is not 250'
+  fi
+fi
+# ============= grammar.py ==============
+if test -f 'grammar.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING grammar.py (file already exists)'
+else
+${echo} 'x - extracting grammar.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'grammar.py' &&
+import re
+from orderedset import orderedset
+X
+X
+class item:
+X    def __init__(self, nt, prod, dotpos=0):
+X        self.nt, self.prod, self.dotpos = nt, prod, dotpos
+X        self.hash = hash((self.nt, self.prod, self.dotpos))
+X
+X    def __eq__(self, other):
+X        return self.nt == other.nt and self.prod == other.prod and self.dotpos == other.dotpos
+X
+X    def __hash__(self):
+X        return self.hash
+X
+X    def advanced(self):
+X        assert self.dotpos < len(self.prod)
+X        return item(self.nt, self.prod, self.dotpos + 1)
+X
+X    def retarded(self):
+X        assert self.dotpos > 0
+X        return item(self.nt, self.prod, self.dotpos - 1)
+X
+X    def current(self):
+X        return self.prod[self.dotpos]
+X
+X    def previous(self):
+X        assert self.dotpos > 0
+X        return self.prod[self.dotpos - 1]
+X
+X    def is_reduce(self):
+X        return self.dotpos >= len(self.prod)
+X
+X    def __str__(self):
+X        return self.nt + " -> " + " ".join(list(self.prod[:self.dotpos]) + ["."] + list(self.prod)[self.dotpos:])
+X
+X
+class earleyitem:
+X    def __init__(self, item, origin, index):
+X        self.item, self.origin, self.index = item, origin, index
+X        self.hash = hash((self.item, self.origin))
+X
+X    def __eq__(self, other):
+X        return self.item == other.item and self.origin == other.origin
+X
+X    def __hash__(self):
+X        return self.hash
+X
+X    def __str__(self):
+X        return "(" + str(self.item) + ", " + str(self.origin) + ". " + str(self.index) + ")"
+X
+X
+class earleyset:
+X    def __init__(self):
+X        self.items, self.prev = orderedset(), {}
+X
+X    def add(self, item, origin, index, prev):
+X        newitem = earleyitem(item, origin, index)
+X        if newitem in self.items:
+X            self.prev[newitem].add(prev)
+X        else:
+X            self.prev[newitem] = orderedset([prev])
+X            self.items.add(newitem)
+X
+X    def __contains__(self, item):
+X        return item in self.items
+X
+X    def __iter__(self):
+X        return iter(self.items)
+X
+X    def __str__(self):
+X        return str(self.items)
+X
+X
+class treenode:
+X    def __init__(self, item, token, children=None):
+X        if not children:
+X            children = []
+X        self.item, self.token, self.children = item, token, children
+X
+X    def __iter__(self):
+X        return iter(self.children)
+X
+X    def __len__(self):
+X        return len(self.children)
+X
+X    def __str__(self):
+X        return str(self.item)
+X
+X
+class grammar:
+X    def __init__(self, rules):
+X        self.start = ""
+X        self.rules = {}
+X        self.nonterms = set()
+X        all = set()
+X        for rule in rules:
+X            nt, rhs = (x.strip() for x in rule.split("->"))
+X            if self.start == "":
+X                self.start = nt
+X            self.nonterms.add(nt)
+X            for prod in (x.strip() for x in rhs.split("|")):
+X                if nt not in self.rules:
+X                    self.rules[nt] = set()
+X                self.rules[nt].add(tuple(x.strip() for x in prod.split()))
+X                all |= {x.strip() for x in prod.split()}
+X        self.terms = all - self.nonterms - {"#"}
+X
+X    def __iter__(self):
+X        return iter(self.rules.items())
+X
+X    def __getitem__(self, nt):
+X        return self.rules[nt]
+X
+X    def lex(self, input, patterns):
+X        ret = []
+X        for string in input.split():
+X            while string != "":
+X                longest = ("", "")
+X                for term in self.terms:
+X                    if string.startswith(term):
+X                        longest = longest if len(longest[1]) >= len(term) else (term, term)
+X                for token, pattern in patterns:
+X                    mat = re.match(pattern, string)
+X                    if mat:
+X                        longest = longest if len(longest[1]) >= mat.end() else (token, string[:mat.end()])
+X                if longest == ("", ""):
+X                    longest = ("", string[0])
+X                string = string[len(longest[1]):].strip()
+X                ret.append(longest)
+X        return ret
+X
+X    def parse(self, tokens):
+X        newstart = item(self.start + "'", (self.start,))
+X        table = [earleyset() for _ in range(len(tokens) + 1)]
+X        table[0].add(newstart, 0, 0, None)
+X        for i in range(len(table)):
+X            for eitem in table[i]:
+X                it, origin = eitem.item, eitem.origin
+X                if not it.is_reduce():
+X                    if it.prod == ("#",):
+X                        table[i].add(it.advanced(), i, i, eitem)
+X                    elif it.current() in self.nonterms:
+X                        for prod in self[it.current()]:
+X                            table[i].add(item(it.current(), prod), i, i, eitem)
+X                    else:
+X                        if i < len(tokens) and it.current() == tokens[i][0]:
+X                            table[i + 1].add(it.advanced(), origin, i + 1, eitem)
+X                else:
+X                    for eitem2 in table[origin]:
+X                        it2, origin2 = eitem2.item, eitem2.origin
+X                        if not it2.is_reduce() and it2.current() == it.nt:
+X                            table[i].add(it2.advanced(), origin2, i, eitem)
+X        tokenstomatch = list(tokens)
+X        stack = [earleyitem(newstart.advanced(), 0, len(table) - 1)]
+X        if stack[0] not in table[len(table) - 1]:
+X            return None
+X        path = []
+X        while len(stack) > 0:
+X            current = stack.pop()
+X            if current.index == -1:
+X                current = earleyitem(current.item, current.origin, path[len(path) - 1].index)
+X            path.append(current)
+X            if current in table[len(tokenstomatch)].prev and None in table[len(tokenstomatch)].prev[current]:
+X                continue
+X            if current.item.dotpos == 0:
+X                tomatch = stack.pop()
+X                if tomatch.item.dotpos > 0:
+X                    stack.append(table[current.index].prev[current].get(tomatch))
+X            else:
+X                tomatchtoken = current.item.previous()
+X                target = earleyitem(current.item.retarded(), current.origin, -1)
+X                if tomatchtoken in self.terms and tomatchtoken == tokenstomatch[
+X                    len(tokenstomatch) - 1][0] or tomatchtoken == "#":
+X                    if tomatchtoken != "#":
+X                        tokenstomatch.pop()
+X                    stack.append(table[current.index].prev[current].get(target))
+X                else:
+X                    prospect = None
+X                    for x in table[current.index].prev[current]:
+X                        if x.item.nt == tomatchtoken:
+X                            prospect = x
+X                            break
+X                    stack.append(target)
+X                    stack.append(prospect)
+X        enum = iter(path)
+X        eitem = next(enum, None)
+X
+X        def completerule():
+X            nonlocal eitem
+X            if not eitem:
+X                return None
+X            elif eitem.item.is_reduce():
+X                children = []
+X                old = eitem.item
+X                for token in reversed(eitem.item.prod):
+X                    eitem = next(enum, None)
+X                    children.append(completerule())
+X                return treenode(old, old.nt, list(reversed([x for x in children if x is not None])))
+X            elif eitem.item.current() in self.nonterms:
+X                eitem = next(enum, None)
+X                if not eitem:
+X                    return None
+X                return completerule()
+X            elif eitem.item.current() == "#":
+X                return treenode(eitem.item, "#")
+X            else:
+X                return treenode(eitem.item, tokens[eitem.index][1])
+X
+X        return completerule().children[0]
+SHAR_EOF
+  (set 20 19 09 17 16 00 07 'grammar.py'; eval "$shar_touch") &&
+  chmod 0644 'grammar.py'
+if test $? -ne 0
+then ${echo} 'restore of grammar.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'grammar.py: MD5 check failed'
+       ) << \SHAR_EOF
+6708f64b679709b9e1c8f7d3cb799d35  grammar.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'grammar.py'` -ne 7571 && \
+  ${echo} 'restoration warning:  size of grammar.py is not 7571'
+  fi
+fi
+# ============= Makefile ==============
+if test -f 'Makefile' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Makefile (file already exists)'
+else
+${echo} 'x - extracting Makefile (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Makefile' &&
+all:
+X	@echo 'No compilation needed. Project in python.'
+SHAR_EOF
+  (set 20 20 01 31 11 49 20 'Makefile'; eval "$shar_touch") &&
+  chmod 0644 'Makefile'
+if test $? -ne 0
+then ${echo} 'restore of Makefile failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Makefile: MD5 check failed'
+       ) << \SHAR_EOF
+d70cfca0d505b4cdf492d7bfe93905f5  Makefile
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Makefile'` -ne 56 && \
+  ${echo} 'restoration warning:  size of Makefile is not 56'
+  fi
+fi
+# ============= orderedset.py ==============
+if test -f 'orderedset.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING orderedset.py (file already exists)'
+else
+${echo} 'x - extracting orderedset.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'orderedset.py' &&
+class orderedset:
+X    def __init__(self, iterable=None):
+X        if not iterable:
+X            iterable = []
+X        self.dict = {}
+X        self.list = []
+X        for item in iterable:
+X            self.add(item)
+X
+X    def __contains__(self, item):
+X        return item in self.dict
+X
+X    def __iter__(self):
+X        i = 0
+X        while i < len(self.list):
+X            yield self.list[i]
+X            i += 1
+X
+X    def get(self, item):
+X        return self.list[self.dict[item]]
+X
+X    def __getitem__(self, index):
+X        return self.list[index]
+X
+X    def add(self, item):
+X        if item in self.dict:
+X            return
+X        self.list.append(item)
+X        self.dict[item] = len(self.list) - 1
+X
+X    def __str__(self):
+X        return "{" + ", ".join(str(x) for x in self.list) + "}"
+SHAR_EOF
+  (set 20 19 09 17 16 00 08 'orderedset.py'; eval "$shar_touch") &&
+  chmod 0644 'orderedset.py'
+if test $? -ne 0
+then ${echo} 'restore of orderedset.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'orderedset.py: MD5 check failed'
+       ) << \SHAR_EOF
+3fa9b0ecfddd0f2aa6692fd72be2df37  orderedset.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'orderedset.py'` -ne 776 && \
+  ${echo} 'restoration warning:  size of orderedset.py is not 776'
+  fi
+fi
+# ============= p2 ==============
+if test -f 'p2' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING p2 (file already exists)'
+else
+${echo} 'x - extracting p2 (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'p2' &&
+#!/bin/bash
+python3.6 Parser.py $1
+SHAR_EOF
+  (set 20 20 01 31 11 49 20 'p2'; eval "$shar_touch") &&
+  chmod 0755 'p2'
+if test $? -ne 0
+then ${echo} 'restore of p2 failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'p2: MD5 check failed'
+       ) << \SHAR_EOF
+906bad863306fdca580f8cac2e7523b1  p2
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'p2'` -ne 35 && \
+  ${echo} 'restoration warning:  size of p2 is not 35'
+  fi
+fi
+# ============= Parser.py ==============
+if test -f 'Parser.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Parser.py (file already exists)'
+else
+${echo} 'x - extracting Parser.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Parser.py' &&
+from grammar import grammar
+import sys
+import re
+X
+patterns = [
+X    ("RELOP", r">=|<=|==|!=|>|<"),
+X    ("ADDOP", r"\+|-"),
+X    ("MULOP", r"\*|/"),
+X    ("NUM", r"\d+"),
+X    ("ID", r"[A-Za-z]+")
+]
+X
+cfg = [
+X    "program -> declaration-list",
+X    "declaration-list -> declaration-list declaration | declaration",
+X    "declaration -> var-declaration | fun-declaration",
+X    "var-declaration -> type-specifier ID ; | type-specifier ID [ NUM ] ;",
+X    "type-specifier -> int | void",
+X    "fun-declaration -> type-specifier ID ( params ) compound-stmt",
+X    "params -> param-list | void",
+X    "param-list -> param-list , param | param",
+X    "param -> type-specifier ID | type-specifier ID [ ]",
+X    "compound-stmt -> { local-declarations statement-list }",
+X    "local-declarations -> local-declarations var-declaration | #",
+X    "statement-list -> statement-list statement | #",
+X    "statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt",
+X    "expression-stmt -> expression ; | ;",
+X    "selection-stmt -> if ( expression ) statement | if ( expression ) statement else statement",
+X    "iteration-stmt -> while ( expression ) statement",
+X    "return-stmt -> return ; | return expression ;",
+X    "expression -> var = expression | simple-expression",
+X    "var -> ID | ID [ expression ]",
+X    "simple-expression -> additive-expression RELOP additive-expression | additive-expression",
+X    "additive-expression -> additive-expression ADDOP term | term",
+X    "term -> term MULOP factor | factor",
+X    "factor -> ( expression ) | var | call | NUM",
+X    "call -> ID ( args )",
+X    "args -> arg-list | #",
+X    "arg-list -> arg-list , expression | expression"
+]
+X
+string = "\n".join(re.sub(r"//.*$", "", x) for x in re.sub(r"/\*.*?\*/", "", open(sys.argv[1], "r").read(), flags=re.MULTILINE | re.DOTALL).split("\n"))
+gram = grammar(cfg)
+x = gram.parse(gram.lex(string, patterns))
+print("ACCEPT" if x else "REJECT")
+SHAR_EOF
+  (set 20 19 09 17 19 15 32 'Parser.py'; eval "$shar_touch") &&
+  chmod 0644 'Parser.py'
+if test $? -ne 0
+then ${echo} 'restore of Parser.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Parser.py: MD5 check failed'
+       ) << \SHAR_EOF
+659d41a26a45f11499c8e2464605e181  Parser.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Parser.py'` -ne 1934 && \
+  ${echo} 'restoration warning:  size of Parser.py is not 1934'
+  fi
+fi
+# ============= testcase.cm ==============
+if test -f 'testcase.cm' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING testcase.cm (file already exists)'
+else
+${echo} 'x - extracting testcase.cm (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'testcase.cm' &&
+int main(void) {
+X	return 0;
+}
+SHAR_EOF
+  (set 20 19 09 28 14 25 58 'testcase.cm'; eval "$shar_touch") &&
+  chmod 0644 'testcase.cm'
+if test $? -ne 0
+then ${echo} 'restore of testcase.cm failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'testcase.cm: MD5 check failed'
+       ) << \SHAR_EOF
+dc8f5d3e73c017c8fa1bd056fae6026c  testcase.cm
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'testcase.cm'` -ne 30 && \
+  ${echo} 'restoration warning:  size of testcase.cm is not 30'
+  fi
+fi
+# ============= typescript ==============
+if test -f 'typescript' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING typescript (file already exists)'
+else
+${echo} 'x - extracting typescript (binary)'
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 typescript
+M4V-R:7!T('-T87)T960@;VX@1G)I(#,Q($IA;B`R,#(P(#$Q.C0Y.C(P($%-
+M($535`H;6S\Q,#,T:&)A<V@M-"XQ)"!U;G-H87(@;W5T7V9N#0HO:&]M92\T
+M,"]N,#$S-C<V-#`O<#(O=&5S="]O=71?9FXZ#0IX("T@8W)E871E9"!L;V-K
+M(&1I<F5C=&]R>2!@7W-H,#(X,#`G+@T*>"`M(&5X=')A8W1I;F<@9&]C+G1X
+M="`H=&5X="D-"G@@+2!E>'1R86-T:6YG(&=R86UM87(N<'D@*'1E>'0I#0IX
+M("T@97AT<F%C=&EN9R!-86ME9FEL92`H=&5X="D-"G@@+2!E>'1R86-T:6YG
+M(&]R9&5R961S970N<'D@*'1E>'0I#0IX("T@97AT<F%C=&EN9R!P,B`H=&5X
+M="D-"G@@+2!E>'1R86-T:6YG(%!A<G-E<BYP>2`H=&5X="D-"G@@+2!E>'1R
+M86-T:6YG('1E<W1C87-E+F-M("AT97AT*0T*>"`M(')E;6]V960@;&]C:R!D
+M:7)E8W1O<GD@8%]S:#`R.#`P)RX-"F)A<V@M-"XQ)"!M86ME#0I.;R!C;VUP
+M:6QA=&EO;B!N965D960N(%!R;VIE8W0@:6X@<'ET:&]N+@T*8F%S:"TT+C$D
+M(&-A="!T97-T8V%S92YC;0T*:6YT(&UA:6XH=F]I9"D@>PT*"7)E='5R;B`P
+M.PT*?0T*8F%S:"TT+C$D("XO<#(@=&5S=&-A<V4N8VT-"D%#0T505`T*8F%S
+M:"TT+C$D(&5X:70-"F5X:70-"@I38W)I<'0@9&]N92!O;B!&<FD@,S$@2F%N
+6(#(P,C`@,3$Z-#DZ,C`@04T@15-4"G)I
+`
+end
+SHAR_EOF
+  (set 20 20 01 31 11 49 20 'typescript'; eval "$shar_touch") &&
+  chmod 0644 'typescript'
+if test $? -ne 0
+then ${echo} 'restore of typescript failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'typescript: MD5 check failed'
+       ) << \SHAR_EOF
+3989acb9906ab177d6605d1324046df8  typescript
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'typescript'` -ne 652 && \
+  ${echo} 'restoration warning:  size of typescript is not 652'
+  fi
+fi
+if rm -fr ${lock_dir}
+then ${echo} 'x - removed lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to remove lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+exit 0

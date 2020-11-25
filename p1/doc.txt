@@ -1,0 +1,11 @@
+Jonathan Lemos
+Compiler Project 1
+Lexical Analyzer
+Dr. Eggen
+
+Submitted: 8/30/19
+Due: 9/5/19
+
+The purpose of this project is to separate an input string into a sequence of tokens that correspond to the terminals of the C- CFG. My program accomplishes this by repeatedly matching the beginning of each line with a series of regular expressions and subsequently removing the *longest* match until the string is blank. Whitespace is skipped over using .strip() and comments are handled using a boolean variable.
+
+The makefile doesn't actually do anything because this project is written in Python which does not need to be compiled. The project is run using './p1 $filename'. The input is given through a file specified in the first command-line argument, and the output is given through stdout.

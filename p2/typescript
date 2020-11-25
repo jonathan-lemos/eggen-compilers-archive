@@ -1,0 +1,24 @@
+Script started on Fri 31 Jan 2020 11:49:20 AM EST
+[?1034hbash-4.1$ unshar out_fn
+/home/40/n01367640/p2/test/out_fn:
+x - created lock directory `_sh02800'.
+x - extracting doc.txt (text)
+x - extracting grammar.py (text)
+x - extracting Makefile (text)
+x - extracting orderedset.py (text)
+x - extracting p2 (text)
+x - extracting Parser.py (text)
+x - extracting testcase.cm (text)
+x - removed lock directory `_sh02800'.
+bash-4.1$ make
+No compilation needed. Project in python.
+bash-4.1$ cat testcase.cm
+int main(void) {
+	return 0;
+}
+bash-4.1$ ./p2 testcase.cm
+ACCEPT
+bash-4.1$ exit
+exit
+
+Script done on Fri 31 Jan 2020 11:49:20 AM EST

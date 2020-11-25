@@ -1,0 +1,99 @@
+Script started on Sat 31 Aug 2019 06:27:44 PM EDT
+[?1034h[n01367640@osprey test]$ unshar fn
+/home/40/n01367640/p1/test/fn:
+x - created lock directory `_sh12141'.
+x - extracting doc.txt (binary)
+x - extracting Lexer.py (text)
+x - extracting Makefile (text)
+x - extracting p1 (text)
+x - extracting testcase.cm (text)
+x - removed lock directory `_sh12141'.
+[n01367640@osprey test]$ make
+Compiling not needed, project in python
+[n01367640@osprey test]$ ./p1 testcase.cm
+Input: '/****This**********/'
+Input: '/**************/'
+Input: '/*************************'
+Input: 'i = 333;        ******************/       */'
+MULOP: *
+MULOP: /
+Input: 'iiii = 3@33;'
+ID: iiii
+=: =
+NUM: 3
+ERROR: @
+NUM: 33
+DELIM: ;
+Input: 'int g 4 cd (int u, int v)      {'
+TYPE: int
+ID: g
+NUM: 4
+ID: cd
+DELIM: (
+TYPE: int
+ID: u
+DELIM: ,
+TYPE: int
+ID: v
+DELIM: )
+DELIM: {
+Input: 'if(v == >= 0) return/*a comment*/ u;'
+KEYWORD: if
+DELIM: (
+ID: v
+RELOP: ==
+RELOP: >=
+NUM: 0
+DELIM: )
+KEYWORD: return
+ID: u
+DELIM: ;
+Input: 'else ret_urn gcd(vxxxxxxvvvvv, u-u/v*v);'
+KEYWORD: else
+ID: ret
+ERROR: _
+ID: urn
+ID: gcd
+DELIM: (
+ID: vxxxxxxvvvvv
+DELIM: ,
+ID: u
+ADDOP: -
+ID: u
+MULOP: /
+ID: v
+MULOP: *
+ID: v
+DELIM: )
+DELIM: ;
+Input: '/* u-u/v*v == u mod v*/'
+Input: '!'
+ERROR: !
+Input: '}'
+DELIM: }
+Input: 'return void while       void main()'
+KEYWORD: return
+TYPE: void
+KEYWORD: while
+TYPE: void
+ID: main
+DELIM: (
+DELIM: )
+Input: '===== >== =>> =>= intvoid whilea inta'
+RELOP: ==
+RELOP: ==
+=: =
+RELOP: >=
+=: =
+=: =
+RELOP: >
+RELOP: >
+=: =
+RELOP: >=
+ID: intvoid
+ID: whilea
+ID: inta
+[n01367640@osprey test]$ exit
+exit
+
+Script done on Sat 31 Aug 2019 06:27:44 PM EDT

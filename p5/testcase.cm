@@ -1,0 +1,46 @@
+int sub(int a, int b[]) {
+    int c;
+    int d[1];
+
+    c = b[2 + 3];
+    d[4 + 5 * 6] = 7 * 8 + 9;
+    10 * (11 + 12);
+    13 + ((14));
+
+    if (d[2]) {
+        c = 15;
+        c = 16;
+        return c / 17 * 18;
+    }
+    else {
+        c = 19 - 20 / 21;
+    }
+
+    if (c - 22)
+        c = 23 - 24;
+
+    while(c + d[25] <= d[26] * (d[27 + 28] - c))
+        c = c - 29 / 30;
+
+    return d[31];
+}
+
+int e;
+int f[32];
+
+void main(void) {
+    int g;
+    int h[33];
+
+    e = sub(e, f);
+    f[34] = sub(h[sub(g + 35 - h[36 + 37] * (38 + 39), f) / 40], h);
+
+    e != f[41];
+    e + f[42];
+    e * f[43];
+    f[44] = e > f[45];
+    if (e) {
+        main();
+    }
+    {}
+}

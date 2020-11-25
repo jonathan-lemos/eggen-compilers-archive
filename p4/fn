@@ -1,0 +1,1023 @@
+#!/bin/sh
+# This is a shell archive (produced by GNU sharutils 4.7).
+# To extract the files from this archive, save it to some FILE, remove
+# everything before the `#!/bin/sh' line above, then type `sh FILE'.
+#
+lock_dir=_sh32445
+# Made on 2019-11-12 16:34 EST by <n01367640@osprey.unfcsd.unf.edu>.
+# Source directory was `/home/40/n01367640/p4'.
+#
+# Existing files will *not* be overwritten, unless `-c' is specified.
+#
+# This shar contains:
+# length mode       name
+# ------ ---------- ------------------------------------------
+#    583 -rw-r--r-- doc.txt
+#   7858 -rw-r--r-- grammar.py
+#   1399 -rw-r--r-- Lexer.py
+#     56 -rw-r--r-- Makefile
+#    776 -rw-r--r-- orderedset.py
+#     33 -rwxr-xr-x p4
+#   2214 -rwxr-xr-x Parser.py
+#   6710 -rw-r--r-- SemAnalyzer.py
+#     28 -rw-r--r-- testcase.cm
+#    172 -rw-r--r-- TestLexer.py
+#    748 -rw-r--r-- typescript
+#
+MD5SUM=${MD5SUM-md5sum}
+f=`${MD5SUM} --version | egrep '^md5sum .*(core|text)utils'`
+test -n "${f}" && md5check=true || md5check=false
+${md5check} || \
+  echo 'Note: not verifying md5sums.  Consider installing GNU coreutils.'
+save_IFS="${IFS}"
+IFS="${IFS}:"
+gettext_dir=FAILED
+locale_dir=FAILED
+first_param="$1"
+for dir in $PATH
+do
+  if test "$gettext_dir" = FAILED && test -f $dir/gettext \
+     && ($dir/gettext --version >/dev/null 2>&1)
+  then
+    case `$dir/gettext --version 2>&1 | sed 1q` in
+      *GNU*) gettext_dir=$dir ;;
+    esac
+  fi
+  if test "$locale_dir" = FAILED && test -f $dir/shar \
+     && ($dir/shar --print-text-domain-dir >/dev/null 2>&1)
+  then
+    locale_dir=`$dir/shar --print-text-domain-dir`
+  fi
+done
+IFS="$save_IFS"
+if test "$locale_dir" = FAILED || test "$gettext_dir" = FAILED
+then
+  echo=echo
+else
+  TEXTDOMAINDIR=$locale_dir
+  export TEXTDOMAINDIR
+  TEXTDOMAIN=sharutils
+  export TEXTDOMAIN
+  echo="$gettext_dir/gettext -s"
+fi
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null
+then if (echo -n test; echo 1,2,3) | grep n >/dev/null
+     then shar_n= shar_c='
+'
+     else shar_n=-n shar_c= ; fi
+else shar_n= shar_c='\c' ; fi
+f=shar-touch.$$
+st1=200112312359.59
+st2=123123592001.59
+st2tr=123123592001.5 # old SysV 14-char limit
+st3=1231235901
+
+if touch -am -t ${st1} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st1} && test -f ${f}; then
+  shar_touch='touch -am -t $1$2$3$4$5$6.$7 "$8"'
+
+elif touch -am ${st2} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st2} && test ! -f ${st2tr} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$1$2.$7 "$8"'
+
+elif touch -am ${st3} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st3} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$2 "$8"'
+
+else
+  shar_touch=:
+  echo
+  ${echo} 'WARNING: not restoring timestamps.  Consider getting and'
+  ${echo} 'installing GNU `touch'\'', distributed in GNU coreutils...'
+  echo
+fi
+rm -f ${st1} ${st2} ${st2tr} ${st3} ${f}
+#
+if test ! -d ${lock_dir}
+then : ; else ${echo} 'lock directory '${lock_dir}' exists'
+  exit 1
+fi
+if mkdir ${lock_dir}
+then ${echo} 'x - created lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to create lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+# ============= doc.txt ==============
+if test -f 'doc.txt' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING doc.txt (file already exists)'
+else
+${echo} 'x - extracting doc.txt (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'doc.txt' &&
+Jonathan Lemos
+Compiler Project 4
+Semantic Analyzer
+Dr. Eggen
+X
+Submitted: 11/04/19
+Due: 11/07/19
+X
+This program is an extension of the previous parser project that also checks the semantic rules of C minus,
+such as making sure that all variables used have been previously declared. It works by recursively descending
+the parse tree made in the previous project. You run it using './p4 $filename', and it prints 'ACCEPT' or 
+'REJECT' depending on if the contents of $filename correspond to a valid C minus program or not. 'make' is
+not needed because the project is written in Python.
+SHAR_EOF
+  (set 20 19 11 12 16 33 44 'doc.txt'; eval "$shar_touch") &&
+  chmod 0644 'doc.txt'
+if test $? -ne 0
+then ${echo} 'restore of doc.txt failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'doc.txt: MD5 check failed'
+       ) << \SHAR_EOF
+f68ca97982e65611e0d6e6589e2fa85a  doc.txt
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'doc.txt'` -ne 583 && \
+  ${echo} 'restoration warning:  size of doc.txt is not 583'
+  fi
+fi
+# ============= grammar.py ==============
+if test -f 'grammar.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING grammar.py (file already exists)'
+else
+${echo} 'x - extracting grammar.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'grammar.py' &&
+import re
+from orderedset import orderedset
+X
+X
+class item:
+X    def __init__(self, nt, prod, dotpos=0):
+X        self.nt, self.prod, self.dotpos = nt, prod, dotpos
+X        self.hash = hash((self.nt, self.prod, self.dotpos))
+X
+X    def __eq__(self, other):
+X        return self.nt == other.nt and self.prod == other.prod and self.dotpos == other.dotpos
+X
+X    def __hash__(self):
+X        return self.hash
+X
+X    def advanced(self):
+X        assert self.dotpos < len(self.prod)
+X        return item(self.nt, self.prod, self.dotpos + 1)
+X
+X    def retarded(self):
+X        assert self.dotpos > 0
+X        return item(self.nt, self.prod, self.dotpos - 1)
+X
+X    def current(self):
+X        return self.prod[self.dotpos]
+X
+X    def previous(self):
+X        assert self.dotpos > 0
+X        return self.prod[self.dotpos - 1]
+X
+X    def is_reduce(self):
+X        return self.dotpos >= len(self.prod)
+X
+X    def __str__(self):
+X        return self.nt + " -> " + " ".join(list(self.prod[:self.dotpos]) + ["."] + list(self.prod)[self.dotpos:])
+X
+X
+class earleyitem:
+X    def __init__(self, item, origin, index):
+X        self.item, self.origin, self.index = item, origin, index
+X        self.hash = hash((self.item, self.origin))
+X
+X    def __eq__(self, other):
+X        return self.item == other.item and self.origin == other.origin
+X
+X    def __hash__(self):
+X        return self.hash
+X
+X    def __str__(self):
+X        return "(" + str(self.item) + ", " + str(self.origin) + ", " + str(self.index) + ")"
+X
+X
+class earleyset:
+X    def __init__(self):
+X        self.items, self.prev = orderedset(), {}
+X
+X    def add(self, item, origin, index, prev):
+X        newitem = earleyitem(item, origin, index)
+X        if newitem in self.items:
+X            self.prev[newitem].add(prev)
+X        else:
+X            self.prev[newitem] = orderedset([prev])
+X            self.items.add(newitem)
+X
+X    def __contains__(self, item):
+X        return item in self.items
+X
+X    def __iter__(self):
+X        return iter(self.items)
+X
+X    def __str__(self):
+X        return str(self.items)
+X
+X
+class treenode:
+X    def __init__(self, item, token, children=None):
+X        if not children:
+X            children = []
+X        self.item, self.token, self.children = item, token, children
+X
+X    def __iter__(self):
+X        return iter(self.children)
+X
+X    def __len__(self):
+X        return len(self.children)
+X
+X    def __str__(self):
+X        return str(self.item)
+X
+X
+class grammar:
+X    def __init__(self, rules):
+X        self.start = ""
+X        self.rules = {}
+X        self.nonterms = set()
+X        all = set()
+X        for rule in rules:
+X            nt, rhs = (x.strip() for x in rule.split("->"))
+X            if self.start == "":
+X                self.start = nt
+X            self.nonterms.add(nt)
+X            for prod in (x.strip() for x in rhs.split("|")):
+X                if nt not in self.rules:
+X                    self.rules[nt] = set()
+X                self.rules[nt].add(tuple(x.strip() for x in prod.split()))
+X                all |= {x.strip() for x in prod.split()}
+X        self.terms = all - self.nonterms - {"#"}
+X
+X    def __iter__(self):
+X        return iter(self.rules.items())
+X
+X    def __getitem__(self, nt):
+X        return self.rules[nt]
+X
+X    def lex(self, input, patterns):
+X        ret = []
+X        for string in input.split():
+X            while string != "":
+X                longest = ("", "")
+X                for term in self.terms:
+X                    if string.startswith(term):
+X                        longest = longest if len(longest[1]) >= len(term) else (term, term)
+X                for token, pattern in patterns:
+X                    mat = re.match(pattern, string)
+X                    if mat:
+X                        longest = longest if len(longest[1]) >= mat.end() else (token, string[:mat.end()])
+X                if longest == ("", ""):
+X                    longest = ("", string[0])
+X                string = string[len(longest[1]):].strip()
+X                ret.append(longest)
+X        return ret
+X
+X    def parse(self, tokens):
+X        newstart = item(self.start + "'", (self.start,))
+X        table = [earleyset() for _ in range(len(tokens) + 1)]
+X        table[0].add(newstart, 0, 0, None)
+X        for i in range(len(table)):
+X            for eitem in table[i]:
+X                it, origin = eitem.item, eitem.origin
+X                if not it.is_reduce():
+X                    if it.prod == ("#",):
+X                        table[i].add(it.advanced(), i, i, eitem)
+X                    elif it.current() in self.nonterms:
+X                        for prod in self[it.current()]:
+X                            table[i].add(item(it.current(), prod), i, i, eitem)
+X                    else:
+X                        if i < len(tokens) and it.current() == tokens[i][0]:
+X                            table[i + 1].add(it.advanced(), origin, i + 1, eitem)
+X                else:
+X                    for eitem2 in table[origin]:
+X                        it2, origin2 = eitem2.item, eitem2.origin
+X                        if not it2.is_reduce() and it2.current() == it.nt:
+X                            table[i].add(it2.advanced(), origin2, i, eitem)
+X        tokenstomatch = list(tokens)
+X
+X        """
+X        to view the table:
+X
+X        for x, i in zip(table, range(len(table))):
+X            print(str(i) + " '" + (tokens[i][0] if i < len(tokens) else "FINAL STATE") + "':")
+X            for y in x:
+X                print(str(y))
+X            print()
+X            
+X        """
+X
+X        stack = [earleyitem(newstart.advanced(), 0, len(table) - 1)]
+X        if stack[0] not in table[len(table) - 1]:
+X            return None
+X        path = []
+X        while len(stack) > 0:
+X            current = stack.pop()
+X            if current.index == -1:
+X                current = earleyitem(current.item, current.origin, path[len(path) - 1].index)
+X            path.append(current)
+X            if current in table[len(tokenstomatch)].prev and None in table[len(tokenstomatch)].prev[current]:
+X                continue
+X            if current.item.dotpos == 0:
+X                tomatch = stack.pop()
+X                if tomatch.item.dotpos > 0:
+X                    stack.append(table[current.index].prev[current].get(tomatch))
+X            else:
+X                tomatchtoken = current.item.previous()
+X                target = earleyitem(current.item.retarded(), current.origin, -1)
+X                if tomatchtoken in self.terms and tomatchtoken == tokenstomatch[
+X                    len(tokenstomatch) - 1][0] or tomatchtoken == "#":
+X                    if tomatchtoken != "#":
+X                        tokenstomatch.pop()
+X                    stack.append(table[current.index].prev[current].get(target))
+X                else:
+X                    prospect = None
+X                    for x in table[current.index].prev[current]:
+X                        if x.item.nt == tomatchtoken:
+X                            prospect = x
+X                            break
+X                    stack.append(target)
+X                    stack.append(prospect)
+X        enum = iter(path)
+X        eitem = next(enum, None)
+X
+X        def completerule():
+X            nonlocal eitem
+X            if not eitem:
+X                return None
+X            elif eitem.item.is_reduce():
+X                children = []
+X                old = eitem.item
+X                for token in reversed(eitem.item.prod):
+X                    eitem = next(enum, None)
+X                    children.append(completerule())
+X                return treenode(old, old.nt, list(reversed([x for x in children if x is not None])))
+X            elif eitem.item.current() in self.nonterms:
+X                eitem = next(enum, None)
+X                if not eitem:
+X                    return None
+X                return completerule()
+X            elif eitem.item.current() == "#":
+X                return treenode(eitem.item, "#")
+X            else:
+X                return treenode(eitem.item, tokens[eitem.index][1])
+X
+X        return completerule().children[0]
+SHAR_EOF
+  (set 20 19 10 26 01 10 07 'grammar.py'; eval "$shar_touch") &&
+  chmod 0644 'grammar.py'
+if test $? -ne 0
+then ${echo} 'restore of grammar.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'grammar.py: MD5 check failed'
+       ) << \SHAR_EOF
+1766d348ed1f428a17a96ece251a6027  grammar.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'grammar.py'` -ne 7858 && \
+  ${echo} 'restoration warning:  size of grammar.py is not 7858'
+  fi
+fi
+# ============= Lexer.py ==============
+if test -f 'Lexer.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Lexer.py (file already exists)'
+else
+${echo} 'x - extracting Lexer.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Lexer.py' &&
+import sys
+import re
+X
+regexes = [
+X    ("ID", r"[a-zA-Z]+"),
+X    ("NUM", r"[0-9]+"),
+X    ("TYPE", r"int|void"),
+X    ("KEYWORD", r"if|else|while|return"),
+X    ("DELIM", r"[,()\[\]{};]"),
+X    ("ADDOP", r"[+\-]"),
+X    ("MULOP", r"[*/]"),
+X    ("=", "="),
+X    ("RELOP", r">=|<=|==|!=|>|<"),
+]
+X
+if len(sys.argv) != 2:
+X    print("Usage: " + sys.argv[0] + " [filename]")
+X
+comment = False
+for line in open(sys.argv[1], "r"):
+X    if line.strip() == "":
+X        continue
+X    print("Input: '" + line.strip() + "'")
+X    line = line.strip()
+X    while line != "":
+X        if not comment:
+X            if line.startswith("//"):
+X                break
+X            if line.startswith("/*"):
+X                line = line[2:]
+X                comment = True
+X                continue
+X            longest = ("ERROR", line[0])
+X            for token, pattern in regexes:
+X                mat = re.match(pattern, line)
+X                if mat:
+X                    longest = longest if len(longest[1]) > mat.end() else (token, line[:mat.end()])
+X            print(longest[0] + ": " + longest[1])
+X            line = line[len(longest[1]):]
+X            line = line.strip()
+X        else:
+X            mat = re.match(r".*?\*/", line)
+X            if not mat:
+X                line = ""
+X            else:
+X                line = line[mat.end():].strip()
+X                comment = False
+if comment:
+X    print("ERROR: Block comment not closed")
+SHAR_EOF
+  (set 20 19 10 26 01 10 07 'Lexer.py'; eval "$shar_touch") &&
+  chmod 0644 'Lexer.py'
+if test $? -ne 0
+then ${echo} 'restore of Lexer.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Lexer.py: MD5 check failed'
+       ) << \SHAR_EOF
+e9942b5bdc074b0ad5c354a842c06af4  Lexer.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Lexer.py'` -ne 1399 && \
+  ${echo} 'restoration warning:  size of Lexer.py is not 1399'
+  fi
+fi
+# ============= Makefile ==============
+if test -f 'Makefile' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Makefile (file already exists)'
+else
+${echo} 'x - extracting Makefile (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Makefile' &&
+all:
+X	@echo 'No compilation needed. Project in python.'
+SHAR_EOF
+  (set 20 19 11 04 14 49 33 'Makefile'; eval "$shar_touch") &&
+  chmod 0644 'Makefile'
+if test $? -ne 0
+then ${echo} 'restore of Makefile failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Makefile: MD5 check failed'
+       ) << \SHAR_EOF
+d70cfca0d505b4cdf492d7bfe93905f5  Makefile
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Makefile'` -ne 56 && \
+  ${echo} 'restoration warning:  size of Makefile is not 56'
+  fi
+fi
+# ============= orderedset.py ==============
+if test -f 'orderedset.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING orderedset.py (file already exists)'
+else
+${echo} 'x - extracting orderedset.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'orderedset.py' &&
+class orderedset:
+X    def __init__(self, iterable=None):
+X        if not iterable:
+X            iterable = []
+X        self.dict = {}
+X        self.list = []
+X        for item in iterable:
+X            self.add(item)
+X
+X    def __contains__(self, item):
+X        return item in self.dict
+X
+X    def __iter__(self):
+X        i = 0
+X        while i < len(self.list):
+X            yield self.list[i]
+X            i += 1
+X
+X    def get(self, item):
+X        return self.list[self.dict[item]]
+X
+X    def __getitem__(self, index):
+X        return self.list[index]
+X
+X    def add(self, item):
+X        if item in self.dict:
+X            return
+X        self.list.append(item)
+X        self.dict[item] = len(self.list) - 1
+X
+X    def __str__(self):
+X        return "{" + ", ".join(str(x) for x in self.list) + "}"
+SHAR_EOF
+  (set 20 19 10 26 01 10 07 'orderedset.py'; eval "$shar_touch") &&
+  chmod 0644 'orderedset.py'
+if test $? -ne 0
+then ${echo} 'restore of orderedset.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'orderedset.py: MD5 check failed'
+       ) << \SHAR_EOF
+3fa9b0ecfddd0f2aa6692fd72be2df37  orderedset.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'orderedset.py'` -ne 776 && \
+  ${echo} 'restoration warning:  size of orderedset.py is not 776'
+  fi
+fi
+# ============= p4 ==============
+if test -f 'p4' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING p4 (file already exists)'
+else
+${echo} 'x - extracting p4 (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'p4' &&
+#!/bin/sh
+python3.6 Parser.py $1
+SHAR_EOF
+  (set 20 19 10 26 01 11 10 'p4'; eval "$shar_touch") &&
+  chmod 0755 'p4'
+if test $? -ne 0
+then ${echo} 'restore of p4 failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'p4: MD5 check failed'
+       ) << \SHAR_EOF
+58d01aa5cf16b09da01a582318c3e3fe  p4
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'p4'` -ne 33 && \
+  ${echo} 'restoration warning:  size of p4 is not 33'
+  fi
+fi
+# ============= Parser.py ==============
+if test -f 'Parser.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING Parser.py (file already exists)'
+else
+${echo} 'x - extracting Parser.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'Parser.py' &&
+#!/usr/bin/python
+from grammar import grammar
+from SemAnalyzer import analyze_prgm, SemAnalyzerException
+import sys
+import re
+X
+patterns = [
+X    ("RELOP", r">=|<=|==|!=|>|<"),
+X    ("ADDOP", r"\+|-"),
+X    ("MULOP", r"\*|/"),
+X    ("NUM", r"\d+"),
+X    ("ID", r"[A-Za-z]+")
+]
+X
+cfg = [
+X    "program -> declaration-list",
+X    "declaration-list -> declaration-list declaration | declaration",
+X    "declaration -> var-declaration | fun-declaration",
+X    "var-declaration -> type-specifier ID ; | type-specifier ID [ NUM ] ;",
+X    "type-specifier -> int | void",
+X    "fun-declaration -> type-specifier ID ( params ) compound-stmt",
+X    "params -> param-list | void",
+X    "param-list -> param-list , param | param",
+X    "param -> type-specifier ID | type-specifier ID [ ]",
+X    "compound-stmt -> { local-declarations statement-list }",
+X    "local-declarations -> local-declarations var-declaration | #",
+X    "statement-list -> statement-list statement | #",
+X    "statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt",
+X    "expression-stmt -> expression ; | ;",
+X    "selection-stmt -> if ( expression ) statement | if ( expression ) statement else statement",
+X    "iteration-stmt -> while ( expression ) statement",
+X    "return-stmt -> return ; | return expression ;",
+X    "expression -> var = expression | simple-expression",
+X    "var -> ID | ID [ expression ]",
+X    "simple-expression -> additive-expression RELOP additive-expression | additive-expression",
+X    "additive-expression -> additive-expression ADDOP term | term",
+X    "term -> term MULOP factor | factor",
+X    "factor -> ( expression ) | var | call | NUM",
+X    "call -> ID ( args )",
+X    "args -> arg-list | #",
+X    "arg-list -> arg-list , expression | expression"
+]
+X
+string = "\n".join(re.sub(r"//.*$", "", x) for x in re.sub(r"/\*.*?\*/", "", open(sys.argv[1], "r").read(), flags=re.MULTILINE | re.DOTALL).split("\n"))
+gram = grammar(cfg)
+x = gram.parse(gram.lex(string, patterns))
+X
+if not x:
+X    print("REJECT")
+X    exit(0)
+try:
+X    analyze_prgm(x)
+X    print("ACCEPT")
+except SemAnalyzerException:
+X    print("REJECT")
+X    exit(0)
+#y = default_gen(x)
+#print("\n".join(" ".join(str(z).ljust(12) for z in x) for x in y))
+X
+SHAR_EOF
+  (set 20 19 11 04 14 46 35 'Parser.py'; eval "$shar_touch") &&
+  chmod 0755 'Parser.py'
+if test $? -ne 0
+then ${echo} 'restore of Parser.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'Parser.py: MD5 check failed'
+       ) << \SHAR_EOF
+da6d087a59135889e5fe4b54feb03dac  Parser.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'Parser.py'` -ne 2214 && \
+  ${echo} 'restoration warning:  size of Parser.py is not 2214'
+  fi
+fi
+# ============= SemAnalyzer.py ==============
+if test -f 'SemAnalyzer.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING SemAnalyzer.py (file already exists)'
+else
+${echo} 'x - extracting SemAnalyzer.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'SemAnalyzer.py' &&
+from grammar import item, treenode
+X
+X
+class SemAnalyzerException(Exception):
+X    pass
+X
+X
+functab = {}
+last_dec_main = False
+last_func = None
+return_hit = True
+vartab = [{}]
+param_flag = False
+X
+X
+def functab_search(id):
+X    if id in functab:
+X        return functab[id]
+X    raise SemAnalyzerException()
+X
+X
+def functab_push(type, id, params):
+X    global last_func
+X    global return_hit
+X    if id in functab:
+X        raise SemAnalyzerException()
+X    last_func = (type, params)
+X    return_hit = type == "void"
+X    functab[id] = last_func
+X
+X
+def vartab_search(id):
+X    for vt in reversed(vartab):
+X        if id in vt:
+X            return vt[id]
+X    raise SemAnalyzerException()
+X
+X
+def vartab_push(type, id, is_arr):
+X    if id in vartab[len(vartab) - 1]:
+X        raise SemAnalyzerException()
+X    vartab[len(vartab) - 1][id] = (type, is_arr)
+X
+X
+def analyze_expr(expr):
+X    if len(expr.children) == 3:
+X        var = expr.children[0]
+X        analyze_var(var)
+X        var_is_arr_deref = len(var.children) == 4
+X        res = vartab_search(var.children[0].token)
+X        if res[1] != var_is_arr_deref:
+X            raise SemAnalyzerException()
+X        if (res[0], res[1] and not var_is_arr_deref) != analyze_expr(expr.children[2]):
+X            raise SemAnalyzerException()
+X        return res[0], res[1] and not var_is_arr_deref
+X    else:
+X        return analyze_simple_expr(expr.children[0])
+X
+X
+def analyze_simple_expr(expr):
+X    if len(expr.children) == 3:
+X        r1 = analyze_additive_expr(expr.children[0])
+X        r2 = analyze_additive_expr(expr.children[2])
+X        if r1[0] == "void" or r1[1] or r1 != r2:
+X            raise SemAnalyzerException()
+X        return "int", False
+X    else:
+X        return analyze_additive_expr(expr.children[0])
+X
+X
+def analyze_additive_expr(expr):
+X    if len(expr.children) == 3:
+X        r1 = analyze_additive_expr(expr.children[0])
+X        r2 = analyze_term(expr.children[2])
+X        if r1[0] == "void" or r1[1] or r1 != r2:
+X            raise SemAnalyzerException()
+X        return r1
+X    else:
+X        return analyze_term(expr.children[0])
+X
+X
+def analyze_term(expr):
+X    if len(expr.children) == 3:
+X        r1 = analyze_term(expr.children[0])
+X        r2 = analyze_factor(expr.children[2])
+X        if r1[0] == "void" or r1[1] or r1 != r2:
+X            raise SemAnalyzerException()
+X        return r1
+X    else:
+X        return analyze_factor(expr.children[0])
+X
+X
+def analyze_factor(expr):
+X    c = expr.children[0]
+X
+X    if len(expr.children) == 3:
+X        return analyze_expr(expr.children[1])
+X    elif c.item.nt == "var":
+X        return analyze_var(c)
+X    elif c.item.nt == "call":
+X        return analyze_call(c)
+X    else:
+X        return "int", False
+X
+X
+def analyze_var(v):
+X    res = vartab_search(v.children[0].token)
+X    res_is_arr_deref = len(v.children) == 4
+X    if res_is_arr_deref:
+X        if analyze_expr(v.children[2]) != ("int", False):
+X            raise SemAnalyzerException()
+X    return res[0], res[1] and not res_is_arr_deref
+X
+X
+def compare_params(params, args):
+X    def compare_single(param, arg):
+X        if (param.children[0].children[0].token, len(param.children) == 4) != analyze_expr(arg):
+X            raise SemAnalyzerException()
+X
+X    if params.item.prod == ("void",):
+X        if args.children[0].item.prod != ("#",):
+X            raise SemAnalyzerException()
+X        return
+X    pp = params.children[0]
+X    aa = args.children[0]
+X
+X    def compare_params_rec(p, a):
+X        if len(p.children) != len(a.children):
+X            raise SemAnalyzerException()
+X        if len(p.children) == 1:
+X            compare_single(p.children[0], a.children[0])
+X        else:
+X            compare_single(p.children[2], a.children[2])
+X            compare_params_rec(p.children[0], a.children[0])
+X
+X    compare_params_rec(pp, aa)
+X
+X
+def analyze_call(c):
+X    f = functab_search(c.children[0].token)
+X    compare_params(f[1], c.children[2])
+X    return f[0], False
+X
+X
+def analyze_vardec(vd):
+X    global last_dec_main
+X
+X    vartab_push(vd.children[0].children[0].token, vd.children[1].token, len(vd.children) == 6)
+X    if vd.children[0].children[0].token == "void":
+X        raise SemAnalyzerException()
+X    if len(vartab) == 1:
+X        last_dec_main = False
+X
+X
+def analyze_fundec(fd):
+X    global last_dec_main
+X
+X    if not return_hit:
+X        raise SemAnalyzerException()
+X    dec = fd.children[0].children[0].token, fd.children[1].token, fd.children[3]
+X    functab_push(*dec)
+X    last_dec_main = dec[0] == "void" and dec[1] == "main" and dec[2].children[0].token == "void"
+X
+X
+def analyze_params(pl):
+X    global param_flag
+X    param_flag = True
+X    vartab.append({})
+X
+X
+def analyze_param(p):
+X    if p.children[0].children[0].token == "void":
+X        raise SemAnalyzerException("cannot have void parameters")
+X    vartab_push(p.children[0].children[0].token, p.children[1].token, len(p.children) == 4)
+X
+X
+def analyze_compound_stmt(cps):
+X    global param_flag
+X    global vartab
+X    if not param_flag:
+X        vartab.append({})
+X    param_flag = False
+X    for child in cps:
+X        analyze(child)
+X    vartab = vartab[:-1]
+X
+X
+def analyze_control_stmt(cs):
+X    if analyze_expr(cs.children[2]) != ("int", False):
+X        raise SemAnalyzerException()
+X
+X
+def analyze_return_stmt(rs):
+X    global return_hit
+X    if len(rs.children) == 2:
+X        if last_func[0] != "void":
+X            raise SemAnalyzerException()
+X    else:
+X        if last_func[0] == "void":
+X            raise SemAnalyzerException()
+X        res = analyze_expr(rs.children[1])
+X        if res[1]:
+X            raise SemAnalyzerException()
+X        if last_func[0] != res[0]:
+X            raise SemAnalyzerException()
+X    return_hit = True
+X
+X
+analyzers = {
+X    "expression": (analyze_expr, False),
+X    "simple-expression": (analyze_simple_expr, False),
+X    "additive-expression": (analyze_additive_expr, False),
+X    "term": (analyze_term, False),
+X    "factor": (analyze_factor, False),
+X    "var": (analyze_var, False),
+X    "call": (analyze_call, False),
+X    "param": (analyze_param, False),
+X    "var-declaration": (analyze_vardec, False),
+X    "fun-declaration": (analyze_fundec, True),
+X    "params": (analyze_params, True),
+X    "selection-stmt": (analyze_control_stmt, True),
+X    "iteration-stmt": (analyze_control_stmt, True),
+X    "return-stmt": (analyze_return_stmt, False),
+X    "compound-stmt": (analyze_compound_stmt, False)
+}
+X
+X
+def analyze(root):
+X    if not root.item.is_reduce():
+X        return
+X
+X    if root.item.nt in analyzers:
+X        func, cont = analyzers[root.item.nt]
+X        func(root)
+X        if not cont:
+X            return
+X
+X    for child in root:
+X        analyze(child)
+X
+X
+def analyze_prgm(prgm):
+X    for child in prgm:
+X        analyze(child)
+X    if not last_dec_main:
+X        raise SemAnalyzerException()
+X    if not return_hit:
+X        raise SemAnalyzerException()
+SHAR_EOF
+  (set 20 19 11 10 23 43 19 'SemAnalyzer.py'; eval "$shar_touch") &&
+  chmod 0644 'SemAnalyzer.py'
+if test $? -ne 0
+then ${echo} 'restore of SemAnalyzer.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'SemAnalyzer.py: MD5 check failed'
+       ) << \SHAR_EOF
+545d39ce2a0c719f6332d3d027aeaa93  SemAnalyzer.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'SemAnalyzer.py'` -ne 6710 && \
+  ${echo} 'restoration warning:  size of SemAnalyzer.py is not 6710'
+  fi
+fi
+# ============= testcase.cm ==============
+if test -f 'testcase.cm' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING testcase.cm (file already exists)'
+else
+${echo} 'x - extracting testcase.cm (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'testcase.cm' &&
+void main(void) {
+X	2 + 2;
+}
+SHAR_EOF
+  (set 20 19 11 10 23 43 52 'testcase.cm'; eval "$shar_touch") &&
+  chmod 0644 'testcase.cm'
+if test $? -ne 0
+then ${echo} 'restore of testcase.cm failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'testcase.cm: MD5 check failed'
+       ) << \SHAR_EOF
+cc217f72f391a9f27fa57072324b7015  testcase.cm
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'testcase.cm'` -ne 28 && \
+  ${echo} 'restoration warning:  size of testcase.cm is not 28'
+  fi
+fi
+# ============= TestLexer.py ==============
+if test -f 'TestLexer.py' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING TestLexer.py (file already exists)'
+else
+${echo} 'x - extracting TestLexer.py (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'TestLexer.py' &&
+import unittest
+X
+X
+class MyTestCase(unittest.TestCase):
+X    def test_something(self):
+X        self.assertEqual(True, False)
+X
+X
+if __name__ == '__main__':
+X    unittest.main()
+SHAR_EOF
+  (set 20 19 10 26 01 10 08 'TestLexer.py'; eval "$shar_touch") &&
+  chmod 0644 'TestLexer.py'
+if test $? -ne 0
+then ${echo} 'restore of TestLexer.py failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'TestLexer.py: MD5 check failed'
+       ) << \SHAR_EOF
+b6862cb654e3b15abbde50055b4e2e28  TestLexer.py
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'TestLexer.py'` -ne 172 && \
+  ${echo} 'restoration warning:  size of TestLexer.py is not 172'
+  fi
+fi
+# ============= typescript ==============
+if test -f 'typescript' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING typescript (file already exists)'
+else
+${echo} 'x - extracting typescript (binary)'
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 typescript
+M4V-R:7!T('-T87)T960@;VX@5'5E(#$R($YO=B`R,#$Y(#`T.C,T.C(T(%!-
+M($535`H;6S\Q,#,T:&)A<V@M-"XQ)"!U;G-H87(@9FX-"B]H;VUE+S0P+VXP
+M,3,V-S8T,"]P-"]T97-T+V9N.@T*>"`M(&-R96%T960@;&]C:R!D:7)E8W1O
+M<GD@8%]S:#,R,3`T)RX-"G@@+2!E>'1R86-T:6YG(&1O8RYT>'0@*'1E>'0I
+M#0IX("T@97AT<F%C=&EN9R!G<F%M;6%R+G!Y("AT97AT*0T*>"`M(&5X=')A
+M8W1I;F<@3&5X97(N<'D@*'1E>'0I#0IX("T@97AT<F%C=&EN9R!-86ME9FEL
+M92`H=&5X="D-"G@@+2!E>'1R86-T:6YG(&]R9&5R961S970N<'D@*'1E>'0I
+M#0IX("T@97AT<F%C=&EN9R!P-"`H=&5X="D-"G@@+2!E>'1R86-T:6YG(%!A
+M<G-E<BYP>2`H=&5X="D-"G@@+2!E>'1R86-T:6YG(%-E;4%N86QY>F5R+G!Y
+M("AT97AT*0T*>"`M(&5X=')A8W1I;F<@=&5S=&-A<V4N8VT@*'1E>'0I#0IX
+M("T@97AT<F%C=&EN9R!497-T3&5X97(N<'D@*'1E>'0I#0IX("T@<F5M;W9E
+M9"!L;V-K(&1I<F5C=&]R>2!@7W-H,S(Q,#0G+@T*8F%S:"TT+C$D(&UA:V4-
+M"DYO(&-O;7!I;&%T:6]N(&YE961E9"X@4')O:F5C="!I;B!P>71H;VXN#0IB
+M87-H+30N,20@8V%T('1E<W1C87-E+F-M#0IV;VED(&UA:6XH=F]I9"D@>PT*
+M"3(@*R`R.PT*?0T*8F%S:"TT+C$D("XO<#0@=&5S=&-A<V4N8VT-"D%#0T50
+M5`T*8F%S:"TT+C$D(&5X:70-"F5X:70-"@I38W)I<'0@9&]N92!O;B!4=64@
+<,3(@3F]V(#(P,3D@,#0Z,S0Z,CD@4$T@15-4"G)I
+`
+end
+SHAR_EOF
+  (set 20 19 11 12 16 34 29 'typescript'; eval "$shar_touch") &&
+  chmod 0644 'typescript'
+if test $? -ne 0
+then ${echo} 'restore of typescript failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'typescript: MD5 check failed'
+       ) << \SHAR_EOF
+49a0e08f096965f414d83ff5309add03  typescript
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'typescript'` -ne 748 && \
+  ${echo} 'restoration warning:  size of typescript is not 748'
+  fi
+fi
+if rm -fr ${lock_dir}
+then ${echo} 'x - removed lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to remove lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+exit 0

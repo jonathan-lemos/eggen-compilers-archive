@@ -1,0 +1,14 @@
+Jonathan Lemos
+Compilers Project 5
+Code Generator
+Dr. Eggen
+
+Submitted: 11/26/19
+Due: 11/28/19
+
+This code generator generates druples corresponding to the input C- program. An input program must be semantically
+correct, because this code generator needs the function table from the semantic analyzer. It works by using a lexer
+to generate tokens, a parser to turn those tokens into a tree, and a code generator that walks the tree to
+generate code. To be honest, I don't quite remember how the lexer or parser work, and I'm not really sure
+how the code generator works either. You run it with `./p5 $filename`, and it'll print 'REJECT' if your input
+file is bad, or a list of druples if it's good.
